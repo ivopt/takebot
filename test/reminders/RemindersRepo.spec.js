@@ -60,4 +60,21 @@ describe('RemindersRepo', () => {
       }
     })
   })
+
+  describe('#remove', () => {
+    it('removes a reminder for an app', async () => {
+      await redisClient.hset(`${rootKey}:reminder`, 'appC', 234)
+      await remindersRepo.remove('appC')
+      expect(await redisClient.hget(`${rootKey}:reminder`, 'appC')).toBeNull()
+    })
+
+    it('no errors are raised if app reminder does not exist', async () => {
+      await redisClient.hset(`${rootKey}:reminder`, 'appC', 234)
+      try {
+        await remindersRepo.remove('appZ')
+      } catch(e) {
+        fail("No exceptions should have been raised!")
+      }
+    })
+  })
 })
