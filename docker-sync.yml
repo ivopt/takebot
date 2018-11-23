@@ -1,0 +1,12 @@
+version: "2"
+options:
+  verbose: true
+  compose-file-path: ./docker-compose.yml
+
+defaults: &defaults
+  sync_strategy: native_osx
+  sync_excludes: [log, tmp, .git, .bundle, .idea, node_modules]
+  sync_excludes_type: Name
+
+syncs:
+  takebot-sync: { src: ./ }
