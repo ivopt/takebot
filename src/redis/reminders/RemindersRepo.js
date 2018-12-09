@@ -4,7 +4,6 @@ const transformValues = (t) => (object) =>
         .reduce((acc, [k, v]) => ({...acc, [k]: t(v)}), {})
 const coalesce = (defaultOutput) => (input) => input ? input : defaultOutput
 
-
 class RemindersRepo {
   constructor(redisClient, rootKey) {
     this.redisClient = redisClient

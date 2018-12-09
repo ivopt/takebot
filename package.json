@@ -6,7 +6,7 @@
   "scripts": {
     "build": "babel src -d dist",
     "takebot": "yarn build && takebot",
-    "test": ""
+    "test": "jest"
   },
   "author": "LynxEyes",
   "license": "MIT",

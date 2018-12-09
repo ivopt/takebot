@@ -5,6 +5,8 @@ class AppsRepo {
     this.apps = apps
   }
 
+  setApps(apps) { this.apps = apps }
+
   list() { return Promise.resolve(this.apps) }
 
   take(app, user) {

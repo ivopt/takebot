@@ -1,4 +1,4 @@
-const locator = () => {
+const Locator = () => {
   const self = {
     register: (name, service) => {
       if (!name)
@@ -22,4 +22,5 @@ const locator = () => {
   return self
 }
 
-export default locator()
+export default Locator()
+export { Locator }

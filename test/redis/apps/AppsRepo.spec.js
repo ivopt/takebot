@@ -1,5 +1,5 @@
-import redis from '../../src/util/PromiseRedis'
-import AppsRepo from '../../src/apps/AppsRepo'
+import redis from '../../../src/util/PromiseRedis'
+import AppsRepo from '../../../src/redis/apps/AppsRepo'
 
 describe('AppsRepo', () => {
   const AppsRepoKey = "TakeBot"
