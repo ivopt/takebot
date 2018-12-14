@@ -15,7 +15,7 @@ describe('TakeApp', () => {
   })
 
   afterAll(() => {
-    Context.redisClient.quit()
+    Context.exit()
   })
 
   it('', () => {
