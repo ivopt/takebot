@@ -18,7 +18,10 @@ const Locator = () => {
       return self
     },
 
-    onExit: (callback) => self.__onExit.push(callback),
+    onExit: (callback) => {
+      self.__onExit.push(callback)
+      return self
+    },
 
     exit: () => {
       self.__onExit.forEach(element => element())
