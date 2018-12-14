@@ -10,27 +10,20 @@ class RemindersRepo {
     this.reminders = `${rootKey}:reminder`
   }
 
-  all() {
-    return this.redisClient.hgetall(this.reminders)
-                           .then(coalesce({}))
-                           .then(transformValues(Number))
-  }
+  all = () => this.redisClient.hgetall(this.reminders)
+                              .then(coalesce({}))
+                              .then(transformValues(Number))
 
-  find(app){
-    return this.redisClient.hget(this.reminders, app)
-                           .then(coalesce(undefined))
-                           .then(transformOne(Number))
-  }
+  find = (app) => this.redisClient.hget(this.reminders, app)
+                                  .then(coalesce(undefined))
+                                  .then(transformOne(Number))
 
-  add(app, timerId) {
-    return this.find(app)
-               .then((val) => { if (val) throw 'Reminder is already set' })
-               .then(() => this.redisClient.hset(this.reminders, app, timerId))
-  }
+  add = (app, timerId) =>
+    this.find(app)
+        .then((val) => { if (val) throw 'Reminder is already set' })
+        .then(() => this.redisClient.hset(this.reminders, app, timerId))
 
-  remove(app) {
-    return this.redisClient.hdel(this.reminders, app)
-  }
+  remove = (app) => this.redisClient.hdel(this.reminders, app)
 }
 
 export default RemindersRepo

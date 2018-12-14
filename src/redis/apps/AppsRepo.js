@@ -5,25 +5,12 @@ class AppsRepo {
     this.apps = apps
   }
 
-  setApps(apps) { this.apps = apps }
-
-  list() { return Promise.resolve(this.apps) }
-
-  take(app, user) {
-    return this.redisClient.hset(this.appsKey, app, user)
-  }
-
-  release(app) {
-    return this.redisClient.hdel(this.appsKey, app)
-  }
-
-  holder(app) {
-    return this.redisClient.hget(this.appsKey, app)
-  }
-
-  status() {
-    return this.redisClient.hgetall(this.appsKey)
-  }
+  setApps = (apps) => this.apps = apps
+  list = () => Promise.resolve(this.apps)
+  take = (app, user) => this.redisClient.hset(this.appsKey, app, user)
+  release = (app) => this.redisClient.hdel(this.appsKey, app)
+  holder = (app) => this.redisClient.hget(this.appsKey, app)
+  status = () => this.redisClient.hgetall(this.appsKey)
 }
 
 export default AppsRepo
