@@ -13,6 +13,7 @@ export default {
       hset:     promisify(client.hset).bind(client),
       hdel:     promisify(client.hdel).bind(client),
       hgetall:  promisify(client.hgetall).bind(client),
+      flushall: promisify(client.flushall).bind(client),
       quit:     client.quit.bind(client)
     }
   }

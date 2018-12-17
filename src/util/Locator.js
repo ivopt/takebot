@@ -23,12 +23,22 @@ const Locator = () => {
       return self
     },
 
+    onReset: (callback) => {
+      self.__onReset.push(callback)
+      return self
+    },
+
     exit: () => {
-      self.__onExit.forEach(element => element())
+      self.__onExit.forEach(callback => callback())
+    },
+
+    reset: () => {
+      self.__onReset.forEach(callback => callback())
     }
   }
 
   self.__onExit = []
+  self.__onReset = []
   return self
 }
 

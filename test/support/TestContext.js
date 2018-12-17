@@ -10,5 +10,8 @@ locator.register('redisClient', PromiseRedis.createClient({url: process.env['RED
        .onExit(() => {
          locator.redisClient.quit()
        })
+       .onReset(() => {
+         locator.redisClient.flushall()
+       })
 
 export default locator
