@@ -1,5 +1,5 @@
-import redis from '~/src/util/PromiseRedis'
-import RemindersRepo from '~/src/redis/reminders/RemindersRepo'
+import redis from '#/src/util/PromiseRedis'
+import RemindersRepo from '#/src/redis/reminders/RemindersRepo'
 
 describe('RemindersRepo', () => {
   const rootKey = 'TakeBot'

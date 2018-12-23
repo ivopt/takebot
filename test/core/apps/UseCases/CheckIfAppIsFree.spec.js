@@ -1,4 +1,4 @@
-import CheckIfAppIsFree from '~/src/core/apps/UseCases/CheckIfAppIsFree'
+import CheckIfAppIsFree from '#/src/core/apps/UseCases/CheckIfAppIsFree'
 
 describe('CheckIfAppIsFree', () => {
   describe('when app is not taken', () => {
