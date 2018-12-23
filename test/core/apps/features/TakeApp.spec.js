@@ -1,5 +1,5 @@
-import Context from '../../../support/TestContext'
-import TakeApp from '../../../../src/core/apps/features/TakeApp'
+import Context from '~/test/support/TestContext'
+import TakeApp from '~/src/core/apps/features/TakeApp'
 
 describe('TakeApp', () => {
   let takeApp = null

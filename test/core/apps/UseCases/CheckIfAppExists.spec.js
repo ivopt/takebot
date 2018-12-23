@@ -1,4 +1,4 @@
-import CheckIfAppExists from '../../../../src/core/apps/UseCases/CheckIfAppExists'
+import CheckIfAppExists from '~/src/core/apps/UseCases/CheckIfAppExists'
 
 describe('CheckIfAppExists', () => {
   const mockedAppRepo = {

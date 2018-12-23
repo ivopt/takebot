@@ -1,4 +1,4 @@
-import TakeAppForUser from '../../../../src/core/apps/UseCases/TakeAppForUser'
+import TakeAppForUser from '~/src/core/apps/UseCases/TakeAppForUser'
 
 describe('TakeAppForUser', () => {
   const takeMock = jest.fn()

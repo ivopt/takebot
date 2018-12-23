@@ -1,7 +1,7 @@
-import { Locator } from '../../src/util/Locator'
-import PromiseRedis from '../../src/util/PromiseRedis'
-import AppsRepo from '../../src/redis/apps/AppsRepo'
-import RemindersRepo from '../../src/redis/reminders/RemindersRepo'
+import { Locator } from '~/src/util/Locator'
+import PromiseRedis from '~/src/util/PromiseRedis'
+import AppsRepo from '~/src/redis/apps/AppsRepo'
+import RemindersRepo from '~/src/redis/reminders/RemindersRepo'
 
 const locator = Locator()
 locator.register('redisClient', PromiseRedis.createClient({url: process.env['REDIS_URL']}))

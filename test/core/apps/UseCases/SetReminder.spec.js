@@ -1,4 +1,4 @@
-import SetReminder from '../../../../src/core/apps/UseCases/SetReminder'
+import SetReminder from '~/src/core/apps/UseCases/SetReminder'
 
 describe('SetReminder', () => {
   const remindInterval = 100
