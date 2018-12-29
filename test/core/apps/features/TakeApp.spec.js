@@ -10,9 +10,8 @@ describe('TakeApp', () => {
     takeApp = TakeApp({
       appsRepo: Context.appsRepo,
       remindersRepo: Context.remindersRepo,
-      slackBot: Context.slackBot,
-      remindIn: 1,
-      delayFn: jest.fn(() => 123)
+      notifier: Context.notifier,
+      remindIn: 1
     })
   })
 
@@ -25,10 +24,15 @@ describe('TakeApp', () => {
     expect(holder).toEqual("ivo")
   })
 
+  // TODO: Review this
   it('sets up a reminder', async () => {
     await takeApp("appA", "ivo")
     const reminderId = await Context.remindersRepo.find("appA")
-    expect(reminderId).toEqual(123)
+    expect(reminderId).toBeDefined()
+  })
+
+  it('warns on slack user has taken the app', () => {
+    // TODO: This!!
   })
 
   it('when an app does not exist, fails and warns the app does not exist', async () => {

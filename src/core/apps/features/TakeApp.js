@@ -7,15 +7,14 @@ import WarnInChannel from '../UseCases/WarnInChannel'
 const TakeApp = ({
   appsRepo,
   remindersRepo,
-  slackBot,
+  notifier,
   remindIn,
-  delayFn,
 }) => (app, user) =>
   Promise.resolve({app, user})
          .then(CheckIfAppExists(appsRepo))
          .then(CheckIfAppIsFree(appsRepo))
          .then(TakeAppForUser(appsRepo))
-         .then(SetReminder(remindIn, delayFn, remindersRepo, slackBot))
-         .then(WarnInChannel(slackBot))
+         .then(SetReminder(remindIn, remindersRepo, notifier))
+         .then(WarnInChannel(notifier))
 
 export default TakeApp
