@@ -1,4 +1,4 @@
-import IRemindersRepo from "../../core/IRemindersRepo"
+import IRemindersRepo from "../../core/reminders/IRemindersRepo"
 
 const transformOne = (t, defaultValue) => (v) => v && t(v) || defaultValue
 const transformValues = (t) => (object) =>

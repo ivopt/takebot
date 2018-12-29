@@ -1,4 +1,4 @@
-import IAppsRepo from "../../core/IAppsRepo"
+import IAppsRepo from "../../core/apps/IAppsRepo"
 
 class AppsRepo extends IAppsRepo {
   constructor(redisClient, apps = []) {
