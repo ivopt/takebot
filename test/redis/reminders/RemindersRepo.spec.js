@@ -1,4 +1,4 @@
-import redis from '#/src/util/PromiseRedis'
+import redis from '#/src/redis/PromiseRedis'
 import RemindersRepo from '#/src/redis/reminders/RemindersRepo'
 
 describe('RemindersRepo', () => {

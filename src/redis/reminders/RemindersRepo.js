@@ -8,6 +8,7 @@ const coalesce = (defaultOutput) => (input) => input ? input : defaultOutput
 
 class RemindersRepo extends IRemindersRepo {
   constructor(redisClient, rootKey) {
+    super()
     this.redisClient = redisClient
     this.reminders = `${rootKey}:reminder`
   }

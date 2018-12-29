@@ -1,4 +1,4 @@
-import redis from '#/src/util/PromiseRedis'
+import redis from '#/src/redis/PromiseRedis'
 import AppsRepo from '#/src/redis/apps/AppsRepo'
 
 describe('AppsRepo', () => {
