@@ -1,10 +1,12 @@
+import IRemindersRepo from "../../core/IRemindersRepo"
+
 const transformOne = (t, defaultValue) => (v) => v && t(v) || defaultValue
 const transformValues = (t) => (object) =>
   Object.entries(object)
         .reduce((acc, [k, v]) => ({...acc, [k]: t(v)}), {})
 const coalesce = (defaultOutput) => (input) => input ? input : defaultOutput
 
-class RemindersRepo {
+class RemindersRepo extends IRemindersRepo {
   constructor(redisClient, rootKey) {
     this.redisClient = redisClient
     this.reminders = `${rootKey}:reminder`

@@ -1,5 +1,8 @@
-class AppsRepo {
+import IAppsRepo from "../../core/IAppsRepo"
+
+class AppsRepo extends IAppsRepo {
   constructor(redisClient, apps = []) {
+    super()
     this.redisClient = redisClient
     this.appsKey = "TakeBot:taken"
     this.apps = apps
