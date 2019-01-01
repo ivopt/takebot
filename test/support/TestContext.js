@@ -8,8 +8,19 @@ import ITakeNotifier from '#/src/core/ITakeNotifier'
 //       might wanna hit some faked API of some sort - stubby4node?
 //       Regardless of what's used, we need to review this!
 class MockedNotifier extends ITakeNotifier {
-  notifyUser = () => {}
-  notifyTeam = () => {}
+  constructor() {
+    super()
+    this.teamNotifications = []
+    this.userNotifications = []
+  }
+
+  notifyUser = (user, message) => { this.userNotifications.push({user, message}) }
+  notifyTeam = (message) => { this.teamNotifications.push({message}) }
+
+  reset = () => {
+    this.teamNotifications = []
+    this.userNotifications = []
+  }
 }
 
 const locator = Locator()
@@ -22,6 +33,7 @@ locator.register('redisClient', PromiseRedis.createClient({url: process.env['RED
        })
        .onReset(() => {
          locator.redisClient.flushall()
+         locator.notifier.reset()
        })
 
 export default locator

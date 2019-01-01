@@ -1,7 +1,7 @@
 const WarnInChannel = (
-  slackBot
+  notifier
 ) => async (ctx) => {
-  // TODO: This
+  notifier.notifyTeam(`${ctx.user} has taken \`${ctx.app}\``)
   return ctx
 }
 
