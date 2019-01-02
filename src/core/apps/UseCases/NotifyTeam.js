@@ -1,7 +1,8 @@
 const NotifyTeam = (
-  notifier
+  notifier,
+  messageTemplate
 ) => async (ctx) => {
-  notifier.notifyTeam(`${ctx.user} has taken \`${ctx.app}\``)
+  notifier.notifyTeam(messageTemplate({user: ctx.user, app: ctx.app}))
   return ctx
 }
 

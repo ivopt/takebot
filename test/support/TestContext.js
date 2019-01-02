@@ -3,6 +3,7 @@ import PromiseRedis from '#/src/redis/PromiseRedis'
 import AppsRepo from '#/src/redis/apps/AppsRepo'
 import RemindersRepo from '#/src/redis/reminders/RemindersRepo'
 import ITakeNotifier from '#/src/core/ITakeNotifier'
+import Messages from '#/src/messages'
 
 // TODO: This is to be used on integration test. We don't wanna hit slack, but we
 //       might wanna hit some faked API of some sort - stubby4node?
@@ -28,6 +29,7 @@ locator.register('redisClient', PromiseRedis.createClient({url: process.env['RED
        .register('appsRepo', new AppsRepo(locator.redisClient))
        .register('remindersRepo', new RemindersRepo(locator.redisClient, process.env['ROOT_KEY']))
        .register('notifier', new MockedNotifier())
+       .register('messages', Messages)
        .onExit(() => {
          locator.redisClient.quit()
        })

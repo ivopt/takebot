@@ -8,6 +8,7 @@ const TakeApp = ({
   appsRepo,
   remindersRepo,
   notifier,
+  messages,
   remindIn,
 }) => (app, user) =>
   Promise.resolve({app, user})
@@ -15,6 +16,6 @@ const TakeApp = ({
          .then(CheckIfAppIsFree(appsRepo))
          .then(TakeAppForUser(appsRepo))
          .then(SetReminder(remindIn, remindersRepo, notifier))
-         .then(NotifyTeam(notifier))
+         .then(NotifyTeam(notifier, messages.userHasTakenApp))
 
 export default TakeApp

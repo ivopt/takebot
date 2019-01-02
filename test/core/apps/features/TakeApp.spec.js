@@ -11,6 +11,7 @@ describe('TakeApp', () => {
       appsRepo: Context.appsRepo,
       remindersRepo: Context.remindersRepo,
       notifier: Context.notifier,
+      messages: Context.messages,
       remindIn: 1
     })
   })
