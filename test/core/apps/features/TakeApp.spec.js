@@ -1,5 +1,6 @@
 import Context from '#/test/support/TestContext'
 import TakeApp from '#/src/core/apps/features/TakeApp'
+import { AppDoesNotExist } from '#/src/core/apps/Errors'
 
 describe('TakeApp', () => {
   let takeApp = null
@@ -43,7 +44,7 @@ describe('TakeApp', () => {
       await takeApp('appZ', 'ivo')
       fail('Expected to fail')
     } catch(error) {
-      expect(error).toEqual('App does not exist')
+      expect(error).toBeInstanceOf(AppDoesNotExist)
     }
   })
 

@@ -1,4 +1,5 @@
 import CheckIfAppExists from '#/src/core/apps/UseCases/CheckIfAppExists'
+import { AppDoesNotExist } from '../../../../src/core/apps/Errors';
 
 describe('CheckIfAppExists', () => {
   const mockedAppRepo = {
@@ -14,7 +15,7 @@ describe('CheckIfAppExists', () => {
 
   it('when app does not exist, fails with error message', (done) => {
     checkIfAppExists({ app: 'appC' }).catch((error) => {
-      expect(error).toEqual('App does not exist')
+      expect(error instanceof AppDoesNotExist).toBeTruthy()
       done()
     })
   })
