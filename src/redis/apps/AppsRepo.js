@@ -1,6 +1,6 @@
 import IAppsRepo from "../../core/apps/IAppsRepo"
 
-class AppsRepo extends IAppsRepo {
+export default class AppsRepo extends IAppsRepo {
   constructor(redisClient, rootKey, apps = []) {
     super()
     this.redisClient = redisClient
@@ -15,5 +15,3 @@ class AppsRepo extends IAppsRepo {
   holder = (app) => this.redisClient.hget(this.appsKey, app)
   status = () => this.redisClient.hgetall(this.appsKey)
 }
-
-export default AppsRepo
