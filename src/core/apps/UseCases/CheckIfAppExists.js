@@ -1,6 +1,6 @@
 import { AppDoesNotExist } from '../Errors'
 
-const CheckIfAppExists = (
+export default (
   appsRepo
 ) => async (ctx) => {
   const appList = await appsRepo.list()
@@ -10,5 +10,3 @@ const CheckIfAppExists = (
   else
     throw new AppDoesNotExist("App does not exist")
 }
-
-export default CheckIfAppExists

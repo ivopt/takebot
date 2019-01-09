@@ -4,7 +4,7 @@ import TakeAppForUser from '../UseCases/TakeAppForUser'
 import SetReminder from '../UseCases/SetReminder'
 import NotifyTeam from '../UseCases/NotifyTeam'
 
-const TakeApp = ({
+export default ({
   appsRepo,
   remindersRepo,
   notifier,
@@ -17,5 +17,3 @@ const TakeApp = ({
          .then(TakeAppForUser(appsRepo))
          .then(SetReminder(remindIn, remindersRepo, notifier))
          .then(NotifyTeam(notifier, messages.userHasTakenApp))
-
-export default TakeApp

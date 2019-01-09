@@ -4,7 +4,7 @@ import ReturnTakenApp from '../UseCases/ReturnTakenApp'
 import RemoveReminders from '../UseCases/RemoveReminders'
 import NotifyTeam from '../UseCases/NotifyTeam'
 
-const ReturnApp = ({
+export default ({
   appsRepo,
   remindersRepo,
   notifier,
@@ -16,5 +16,3 @@ const ReturnApp = ({
          .then(ReturnTakenApp(appsRepo))
          .then(RemoveReminders(remindersRepo))
          .then(NotifyTeam(notifier, messages.userHasReturnedApp))
-
-export default ReturnApp

@@ -1,4 +1,4 @@
-const CheckIfAppIsFree = (
+export default (
   appsRepo
 ) => async (ctx) => {
   const holder = await appsRepo.holder(ctx.app)
@@ -8,5 +8,3 @@ const CheckIfAppIsFree = (
   else
     throw "App is already taken"
 }
-
-export default CheckIfAppIsFree

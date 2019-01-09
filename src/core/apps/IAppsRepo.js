@@ -1,4 +1,4 @@
-class IAppsRepo {
+export default class IAppsRepo {
   setApps = () => { throw "Not Implemented!" }
   list    = () => { throw "Not Implemented!" }
   take    = () => { throw "Not Implemented!" }
@@ -6,5 +6,3 @@ class IAppsRepo {
   holder  = () => { throw "Not Implemented!" }
   status  = () => { throw "Not Implemented!" }
 }
-
-export default IAppsRepo

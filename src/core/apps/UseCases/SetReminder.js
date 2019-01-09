@@ -1,4 +1,4 @@
-const SetReminder = (
+export default (
   remindIn,
   remindersRepo,
   notifier,
@@ -16,5 +16,3 @@ const SetReminder = (
 
   return { ...ctx, reminderId, remindPromise }
 }
-
-export default SetReminder

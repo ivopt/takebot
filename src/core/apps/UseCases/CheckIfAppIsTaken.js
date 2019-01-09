@@ -1,6 +1,6 @@
 import { AppIsNotTaken, AppIsTakenByOtherUser } from '../Errors'
 
-const CheckIfAppIsTaken = (
+export default (
   appsRepo
 ) => async (ctx) => {
   const holder = await appsRepo.holder(ctx.app)
@@ -12,5 +12,3 @@ const CheckIfAppIsTaken = (
 
   return ctx
 }
-
-export default CheckIfAppIsTaken
