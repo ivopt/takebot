@@ -1,5 +1,6 @@
 .docker-sync
 yarn-error.log
 node_modules
-dist/*
+dist
 .env
+tmp
