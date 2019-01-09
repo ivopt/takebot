@@ -26,7 +26,7 @@ class MockedNotifier extends ITakeNotifier {
 
 const locator = Locator()
 locator.register('redisClient', PromiseRedis.createClient({url: process.env['REDIS_URL']}))
-       .register('appsRepo', new AppsRepo(locator.redisClient))
+       .register('appsRepo', new AppsRepo(locator.redisClient, process.env['ROOT_KEY']))
        .register('remindersRepo', new RemindersRepo(locator.redisClient, process.env['ROOT_KEY']))
        .register('notifier', new MockedNotifier())
        .register('messages', Messages)

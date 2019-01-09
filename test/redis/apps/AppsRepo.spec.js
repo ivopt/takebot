@@ -16,7 +16,7 @@ describe('AppsRepo', () => {
     keys.forEach(async key => await redisClient.del(key))
   })
 
-  beforeEach(() => { subject = new AppsRepo(redisClient, apps) })
+  beforeEach(() => { subject = new AppsRepo(redisClient, "TakeBot", apps) })
 
   describe('#list', () => {
     it('returns the list of apps given', async () => {
