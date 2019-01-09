@@ -7,3 +7,4 @@ class BaseError {
 export class AppDoesNotExist extends BaseError {}
 export class AppIsNotTaken extends BaseError {}
 export class AppIsTaken extends BaseError {}
+export class AppIsTakenByOtherUser extends BaseError {}
