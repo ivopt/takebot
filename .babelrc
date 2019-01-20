@@ -1,5 +1,6 @@
 {
   "presets": [ "es2015", "stage-1" ],
+  "sourceMaps": "inline",
   "plugins": [ [
     "babel-plugin-root-import", {
       "rootPathPrefix": "#"
