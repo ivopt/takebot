@@ -1,6 +1,10 @@
 import IAppsRepo from "../../core/apps/IAppsRepo"
 
 export default class AppsRepo extends IAppsRepo {
+  // TODO: Apps list should actually be persisted - this would enable app crashes
+  //       and restarts to be seamless.
+  //       This would also present with the challenge of managing existing apps.
+
   constructor(redisClient, rootKey, apps = []) {
     super()
     this.redisClient = redisClient
