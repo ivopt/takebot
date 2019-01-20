@@ -1,3 +1,5 @@
+import { AppIsTaken } from '../Errors'
+
 export default (
   appsRepo
 ) => async (ctx) => {
@@ -6,5 +8,5 @@ export default (
   if (!holder)
     return ctx
   else
-    throw "App is already taken"
+    throw new AppIsTaken("App is already taken")
 }

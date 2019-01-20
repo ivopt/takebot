@@ -1,4 +1,5 @@
 import CheckIfAppIsFree from '#/src/core/apps/UseCases/CheckIfAppIsFree'
+import { AppIsTaken } from '#/src/core/apps/Errors'
 
 describe('CheckIfAppIsFree', () => {
   describe('when app is not taken', () => {
@@ -27,7 +28,7 @@ describe('CheckIfAppIsFree', () => {
       try {
         await checkIfAppIsFree(ctx)
       } catch(error) {
-        expect(error).toEqual('App is already taken')
+        expect(error instanceof AppIsTaken).toBeTruthy()
       }
     })
   })
