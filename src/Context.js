@@ -26,20 +26,18 @@ class MockedNotifier extends ITakeNotifier {
 }
 
 const locator = Locator()
-locator.register('redisClient', PromiseRedis.createClient({url: process.env['REDIS_URL']}))
-       .register('appsRepo', new AppsRepo(locator.redisClient, process.env['ROOT_KEY']))
-       .register('remindersRepo', new RemindersRepo(locator.redisClient, process.env['ROOT_KEY']))
-       .register('notifier', new MockedNotifier())
-       .register('messages', Messages)
-       .register('takeApp', TakeApp({appsRepo: locator.appsRepo,
-                                     remindersRepo: locator.remindersRepo,
-                                     notifier: locator.notifier,
-                                     messages: locator.messages,
-                                     remindeId: 10}))
-       .register('returnApp', ReturnApp({appsRepo: locator.appsRepo,
-                                         remindersRepo: locator.remindersRepo,
-                                         notifier: locator.notifier,
-                                         messages: locator.messages}))
+locator.singleton('redisClient', PromiseRedis.createClient({url: process.env['REDIS_URL']}))
+       .singleton('messages', Messages)
+       .singleton('notifier', new MockedNotifier())
+       .singleton('appsRepo', new AppsRepo(locator.redisClient, process.env['ROOT_KEY']))
+       .singleton('remindersRepo', new RemindersRepo(locator.redisClient, process.env['ROOT_KEY']))
+       .fnFactory('takeApp',
+                  TakeApp,
+                  ['appsRepo', 'remindersRepo', 'notifier', 'messages'],
+                  { remindIn: 10 })
+       .fnFactory('returnApp',
+                  ReturnApp,
+                  ['appsRepo', 'remindersRepo', 'notifier', 'messages'])
        .onExit(() => {
          locator.redisClient.quit()
        })

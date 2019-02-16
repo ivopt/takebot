@@ -1,40 +1,37 @@
-const Locator = () => {
+export const Locator = () => {
+  const valid = (name) => {
+    if (!name) throw new Error('You must provide a valid name for this service.')
+    if (self[name]) throw new Error(`Service '${name}' already registered`)
+
+    return true
+  }
+
+  const contextProp = (obj, prop) => Object.assign(obj, {[prop]: self[prop]})
+  const getArgs = (injected, grounded) => injected.reduce(contextProp, grounded)
+  const fnFactory    = (fn, ...args) => () =>     fn(getArgs(...args))
+  const classFactory = (fn, ...args) => () => new fn(getArgs(...args))
+
+  const tap = (fn) => (...args) => { fn(...args); return self }
+
+  const register = (name, factory) => {
+    if (valid(name))
+      Object.defineProperty(self, name, { configurable: false, get: factory })
+  }
+
   const self = {
-    register: (name, service) => {
-      if (!name)
-        throw new Error('You must provide a valid name for this service.')
+    fnFactory: tap((name, fn, injectedArgs = [], groundedArgs = {}) =>
+      register(name, fnFactory(fn, injectedArgs, groundedArgs))
+    ),
 
-      if (self[name])
-        throw new Error(`Service '${name}' already registered`)
+    classFactory: tap((name, fn, injectedArgs = [], groundedArgs = {}) =>
+      register(name, classFactory(fn, injectedArgs, groundedArgs))
+    ),
 
-      if (!service)
-        throw new Error(`You must provide a valid service for '${name}'`)
-
-      Object.defineProperty(self, name, {
-        configurable: false,
-        get: function() { return service }
-      })
-
-      return self
-    },
-
-    onExit: (callback) => {
-      self.__onExit.push(callback)
-      return self
-    },
-
-    onReset: (callback) => {
-      self.__onReset.push(callback)
-      return self
-    },
-
-    exit: () => {
-      self.__onExit.forEach(callback => callback())
-    },
-
-    reset: () => {
-      self.__onReset.forEach(callback => callback())
-    }
+    singleton: tap((name, service) => register(name, () => service)),
+    onExit: tap((callback) => self.__onExit.push(callback)),
+    onReset: tap((callback) => self.__onReset.push(callback)),
+    exit: () => { self.__onExit.forEach(callback => callback()) },
+    reset: () => { self.__onReset.forEach(callback => callback()) }
   }
 
   self.__onExit = []
@@ -43,4 +40,3 @@ const Locator = () => {
 }
 
 export default Locator()
-export { Locator }
