@@ -1,7 +1,7 @@
 import { Locator } from '#/src/util/Locator'
 import PromiseRedis from '#/src/redis/PromiseRedis'
 import AppsRepo from '#/src/redis/apps/AppsRepo'
-import RemindersRepo from '#/src/redis/reminders/RemindersRepo'
+import RemindersRepo from '#/src/memory/reminders/RemindersRepo'
 import ITakeNotifier from '#/src/core/ITakeNotifier'
 import Messages from '#/src/messages'
 
@@ -27,7 +27,7 @@ class MockedNotifier extends ITakeNotifier {
 const locator = Locator()
 locator.singleton('redisClient', PromiseRedis.createClient({url: process.env['REDIS_URL']}))
        .singleton('appsRepo', new AppsRepo(locator.redisClient, process.env['ROOT_KEY']))
-       .singleton('remindersRepo', new RemindersRepo(locator.redisClient, process.env['ROOT_KEY']))
+       .singleton('remindersRepo', new RemindersRepo())
        .singleton('notifier', new MockedNotifier())
        .singleton('messages', Messages)
        .onExit(() => {
@@ -36,6 +36,7 @@ locator.singleton('redisClient', PromiseRedis.createClient({url: process.env['RE
        .onReset(() => {
          locator.redisClient.flushall()
          locator.notifier.reset()
+         locator.remindersRepo.reset()
        })
 
 export default locator

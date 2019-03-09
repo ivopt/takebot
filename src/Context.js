@@ -1,7 +1,7 @@
 import { Locator } from './util/Locator'
 import PromiseRedis from './redis/PromiseRedis'
 import AppsRepo from './redis/apps/AppsRepo'
-import RemindersRepo from './redis/reminders/RemindersRepo'
+import RemindersRepo from './memory/reminders/RemindersRepo'
 import ITakeNotifier from './core/ITakeNotifier'
 import Messages from './messages'
 
@@ -30,7 +30,7 @@ locator.singleton('redisClient', PromiseRedis.createClient({url: process.env['RE
        .singleton('messages', Messages)
        .singleton('notifier', new MockedNotifier())
        .singleton('appsRepo', new AppsRepo(locator.redisClient, process.env['ROOT_KEY']))
-       .singleton('remindersRepo', new RemindersRepo(locator.redisClient, process.env['ROOT_KEY']))
+       .singleton('remindersRepo', new RemindersRepo())
        .fnFactory('takeApp',
                   TakeApp,
                   ['appsRepo', 'remindersRepo', 'notifier', 'messages'],
