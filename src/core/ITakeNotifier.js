@@ -1,4 +1,4 @@
 export default class ITakeNotifier {
-  notifyTeam = () => { throw "Not Implemented!" }
-  notifyUser = () => { throw "Not Implemented!" }
+  notifyTeam = (user, message) => { throw "Not Implemented!" }
+  notifyUser = (message)       => { throw "Not Implemented!" }
 }
