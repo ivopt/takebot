@@ -1,6 +1,9 @@
 import express from 'express'
 import bodyParser from 'body-parser'
 
+// const channelResponse = (text) => ({ response_type: "in_channel", text })
+const userResponse = (text) => ({ response_type: "ephemeral", text })
+
 export default (Context) => {
   const server = express()
   server.use(bodyParser.urlencoded({ extended: false }))
@@ -12,23 +15,21 @@ export default (Context) => {
   })
 
   server.post('/take', (req, res) => {
-    console.log('TAKE: ', req.body.app, req.body.user)
-    Context.takeApp(req.body.app, req.body.user)
-           .then(() => res.json())
-           .catch((error) => {
-              res.status(400)
-              res.json({message: error.message})
-            })
+    const app = req.body.text
+    const user = req.body.user_name
+
+    Context.takeApp(app, user)
+           .then(() => res.json(userResponse(`You have taken ${app}`)))
+           .catch((error) => res.json(userResponse(error.message)))
   })
 
   server.post('/return', (req, res) => {
-    console.log('RETURN: ', req.body.app, req.body.user)
-    Context.returnApp(req.body.app, req.body.user)
-           .then(() => res.json())
-           .catch((error) => {
-             res.status(400)
-             res.json({message: error.message})
-           })
+    const app = req.body.text
+    const user = req.body.user_name
+
+    Context.returnApp(app, user)
+           .then(() => res.json(userResponse(`You have returned ${app}`)))
+           .catch((error) => res.json(userResponse(error.message)))
   })
 
   return {
