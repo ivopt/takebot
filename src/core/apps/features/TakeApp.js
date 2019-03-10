@@ -1,8 +1,8 @@
 import CheckIfAppExists from '../UseCases/CheckIfAppExists'
 import CheckIfAppIsFree from '../UseCases/CheckIfAppIsFree'
-import TakeAppForUser from '../UseCases/TakeAppForUser'
 import SetReminder from '../UseCases/SetReminder'
 import NotifyTeam from '../UseCases/NotifyTeam'
+import { effect } from '../../../util/Railway'
 
 export default ({
   appsRepo,
@@ -14,6 +14,6 @@ export default ({
   Promise.resolve({app, user})
          .then(CheckIfAppExists(appsRepo))
          .then(CheckIfAppIsFree(appsRepo))
-         .then(TakeAppForUser(appsRepo))
+         .then(effect(({app, user}) => appsRepo.take(app, user)))
          .then(SetReminder(remindIn, remindersRepo, notifier))
          .then(NotifyTeam(notifier, messages.userHasTakenApp))

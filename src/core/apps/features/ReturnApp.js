@@ -1,8 +1,7 @@
 import CheckIfAppExists from '../UseCases/CheckIfAppExists'
 import CheckIfAppIsTaken from '../UseCases/CheckIfAppIsTaken'
-import ReturnTakenApp from '../UseCases/ReturnTakenApp'
-import RemoveReminders from '../UseCases/RemoveReminders'
 import NotifyTeam from '../UseCases/NotifyTeam'
+import { effect } from '../../../util/Railway'
 
 export default ({
   appsRepo,
@@ -13,6 +12,6 @@ export default ({
   Promise.resolve({app, user})
          .then(CheckIfAppExists(appsRepo))
          .then(CheckIfAppIsTaken(appsRepo))
-         .then(ReturnTakenApp(appsRepo))
-         .then(RemoveReminders(remindersRepo))
+         .then(effect(({app}) => appsRepo.release(app)))
+         .then(effect(({app}) => remindersRepo.remove(app)))
          .then(NotifyTeam(notifier, messages.userHasReturnedApp))

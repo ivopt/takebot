@@ -2,6 +2,8 @@ export default (
   notifier,
   messageTemplate
 ) => async (ctx) => {
-  notifier.notifyTeam(messageTemplate({user: ctx.user, app: ctx.app}))
+  const message = messageTemplate({user: ctx.user, app: ctx.app})
+  notifier.notifyTeam(message)
+
   return ctx
 }
