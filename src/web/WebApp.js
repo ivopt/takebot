@@ -1,8 +1,7 @@
 import express from 'express'
 import bodyParser from 'body-parser'
-
-// const channelResponse = (text) => ({ response_type: "in_channel", text })
-const userResponse = (text) => ({ response_type: "ephemeral", text })
+import SlackRoutes from './Slack'
+import RestRoutes from './Rest'
 
 export default (Context) => {
   const server = express()
@@ -14,23 +13,8 @@ export default (Context) => {
        .send("OK")
   })
 
-  server.post('/take', (req, res) => {
-    const app = req.body.text
-    const user = req.body.user_name
-
-    Context.takeApp(app, user)
-           .then(() => res.json(userResponse(`You have taken ${app}`)))
-           .catch((error) => res.json(userResponse(error.message)))
-  })
-
-  server.post('/return', (req, res) => {
-    const app = req.body.text
-    const user = req.body.user_name
-
-    Context.returnApp(app, user)
-           .then(() => res.json(userResponse(`You have returned ${app}`)))
-           .catch((error) => res.json(userResponse(error.message)))
-  })
+  SlackRoutes(Context, server)
+  RestRoutes(Context, server)
 
   return {
     run: () =>
