@@ -1,10 +1,11 @@
+import { Router } from 'express'
 import Command from './Command/Command'
 
 const validToken = (token) =>
   token == process.env['SLACK_VERIFICATION_TOKEN']
 
-export default (Context, server) => {
-  server.post('/slack', (req, res) => {
+export default (Context, router = new Router()) => {
+  router.post('/', (req, res) => {
     if (!validToken(req.body.token)) {
       res.status(401)
       return res.json(userResponse("Invalid credentials"))
@@ -16,6 +17,8 @@ export default (Context, server) => {
       .then(({app}) => res.json(userResponse(`You have taken ${app}`)))
       .catch((error) => res.json(userResponse(error.message)))
   })
+
+  return router
 }
 
 // HELPERS

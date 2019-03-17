@@ -1,10 +1,12 @@
+import { Router } from 'express'
+
 const validBasicAuth = (authHeader) => {
   const [,auth] = authHeader.match(/.*: (.*)/)
   return auth == process.env['REST_VERIFICATION_TOKEN']
 }
 
-export default (Context, server) => {
-  server.post('/take', (req, res) => {
+export default (Context, router = new Router()) => {
+  router.post('/take', (req, res) => {
     if (!validBasicAuth(req.headers["authorization"])) {
       res.status(401)
       return res.json(userResponse("Invalid credentials"))
@@ -17,7 +19,7 @@ export default (Context, server) => {
            .catch((error) => res.json(userResponse(error.message)))
   })
 
-  server.post('/return', (req, res) => {
+  router.post('/return', (req, res) => {
     if (!validBasicAuth(req.headers["authorization"])) {
       res.status(401)
       return res.json(userResponse("Invalid credentials"))
@@ -29,6 +31,8 @@ export default (Context, server) => {
            .then(() => res.json(userResponse(`You have returned ${app}`)))
            .catch((error) => res.json(userResponse(error.message)))
   })
+
+  return router
 }
 
 const userResponse = (text) => ({ response_type: "ephemeral", text })

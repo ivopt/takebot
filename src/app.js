@@ -1,9 +1,9 @@
 import './env.config'
 import Context from './Context'
-import WebApp from './web/WebApp'
+import server from './web/server'
 
 Context.appsRepo.setApps(["appA", "appB"])
 
-const run = () => WebApp(Context).run()
+const run = () => server(Context).run()
 
 module.exports = { run }
