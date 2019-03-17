@@ -5,12 +5,14 @@ const validToken = (token) =>
   token == process.env['SLACK_VERIFICATION_TOKEN']
 
 export default (Context, router = new Router()) => {
-  router.post('/', (req, res) => {
-    if (!validToken(req.body.token)) {
-      res.status(401)
-      return res.json(userResponse("Invalid credentials"))
-    }
+  router.use((req, res, next) => {
+    if (!validToken(req.body.token))
+      res.status(401).json(userResponse("Invalid credentials"))
+    else
+      next()
+  })
 
+  router.post('/', (req, res) => {
     const command = new Command(req.body.user_name, req.body.text)
 
     command.run(Context)
