@@ -3,8 +3,7 @@ import express from 'express'
 import WebApp from '../../src/web/WebApp'
 
 describe('WebApp', () => {
-  const app = express()
-  app.use(WebApp())
+  const app = express().use(WebApp())
 
   it('responds with a 200 OK when running', (done) => {
     request(app)
