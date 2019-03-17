@@ -1,10 +1,10 @@
 import { Router } from 'express'
 import Command from './Command/Command'
 
-const validToken = (token) =>
-  token == process.env['SLACK_VERIFICATION_TOKEN']
+export default (Context, config, router = new Router()) => {
+  const validToken = (token) =>
+    token == config.env['SLACK_VERIFICATION_TOKEN']
 
-export default (Context, router = new Router()) => {
   router.use((req, res, next) => {
     if (!validToken(req.body.token))
       res.status(401).json(userResponse("Invalid credentials"))
