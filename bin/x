@@ -1,0 +1,11 @@
+#!/bin/bash
+
+function redis() {
+  redis-cli -u redis://127.0.0.1:16379 $@
+}
+
+function help() {
+  compgen -A function
+}
+
+eval "$1 ${@:2}"
