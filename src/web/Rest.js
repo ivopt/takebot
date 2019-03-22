@@ -20,7 +20,7 @@ export default (Context, config, router = new Router()) => {
 
     Context.takeApp(app, user)
            .then(() => res.json(userResponse(`You have taken ${app}`)))
-           .catch((error) => res.json(userResponse(error.message)))
+           .catch((error) => res.status(403).json(userResponse(error.message)))
   })
 
   router.post('/return', (req, res) => {
@@ -28,10 +28,10 @@ export default (Context, config, router = new Router()) => {
 
     Context.returnApp(app, user)
            .then(() => res.json(userResponse(`You have returned ${app}`)))
-           .catch((error) => res.json(userResponse(error.message)))
+           .catch((error) => res.status(403).json(userResponse(error.message)))
   })
 
   return router
 }
 
-const userResponse = (text) => ({ response_type: "ephemeral", text })
+const userResponse = (text) => ({ text })
