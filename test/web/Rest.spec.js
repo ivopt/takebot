@@ -46,11 +46,11 @@ describe('Rest', () => {
     await Context.takeApp('appA', 'john')
 
     await request(app())
-      .post('/return')
-      .send({user: 'john', app: 'appA'})
-      .set('Authorization', 'basic: banana')
-      .set('Content-Type', 'application/json')
-      .expect(200, { text: 'You have returned appA' })
+            .post('/return')
+            .send({user: 'john', app: 'appA'})
+            .set('Authorization', 'basic: banana')
+            .set('Content-Type', 'application/json')
+            .expect(200, { text: 'You have returned appA' })
   })
 
   it('refuses to take a taken app', async () => {
@@ -67,21 +67,21 @@ describe('Rest', () => {
 
   it('refuses to return an app that was not taken', async () => {
     await request(app())
-      .post('/return')
-      .send({user: 'john', app: 'appA'})
-      .set('Authorization', 'basic: banana')
-      .set('Content-Type', 'application/json')
-      .expect(403, { text: 'App is not taken' })
+            .post('/return')
+            .send({user: 'john', app: 'appA'})
+            .set('Authorization', 'basic: banana')
+            .set('Content-Type', 'application/json')
+            .expect(403, { text: 'App is not taken' })
   })
 
   it('refuses to return an app that was not taken by the user', async () => {
     await Context.takeApp('appA', 'billy')
 
     await request(app())
-      .post('/return')
-      .send({user: 'john', app: 'appA'})
-      .set('Authorization', 'basic: banana')
-      .set('Content-Type', 'application/json')
-      .expect(403, { text: 'Taken by billy, not you' })
+            .post('/return')
+            .send({user: 'john', app: 'appA'})
+            .set('Authorization', 'basic: banana')
+            .set('Content-Type', 'application/json')
+            .expect(403, { text: 'Taken by billy, not you' })
   })
 })
