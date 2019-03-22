@@ -6,6 +6,7 @@ describe('TakeApp', () => {
   let takeApp = null
 
   beforeAll(() => {
+    Context.reset()
     Context.appsRepo.setApps(["appA", "appB"])
 
     takeApp = TakeApp({

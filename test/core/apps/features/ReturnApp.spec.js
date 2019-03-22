@@ -13,6 +13,7 @@ describe('ReturnApp', () => {
   const expectedReminderId = 1234
 
   beforeAll(() => {
+    Context.reset()
     Context.appsRepo.setApps(["appA", "appB"])
 
     returnApp = ReturnApp({

@@ -12,6 +12,7 @@ describe('Rest', () => {
   const app = () => TestExpressApp().use(Rest(Context, config))
 
   beforeEach(() => {
+    Context.reset()
     Context.appsRepo.setApps(['appA', 'appB'])
   })
   afterAll(() => { Context.exit() })
