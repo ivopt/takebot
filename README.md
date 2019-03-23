@@ -4,15 +4,15 @@ Slack TakeBot - TBD
 
 ## TODO
 
-- [] Persist configured apps!!
+- [ ] Persist configured apps!!
 - [x] Have a single API endpoint for all slack commands
 - [x] Have a way to handle auth (slack token)
 - [x] Have a way to handle auth on the REST API
 - [x] Keep REST API endpoints so other integrations can be done
-- [] Create endpoints for app statuses
-- [] Create endpoints to manage available apps
-- [] Better format for messages (with emojis and all)
-- [] Restore reminders after crash (aka persist reminders)
+- [ ] Create endpoints for app statuses
+- [ ] Create endpoints to manage available apps
+- [ ] Better format for messages (with emojis and all)
+- [ ] Restore reminders after crash (aka persist reminders)
 
 ## Possible endpoints:
 
