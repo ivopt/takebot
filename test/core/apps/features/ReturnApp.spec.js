@@ -12,9 +12,9 @@ describe('ReturnApp', () => {
   const expectedUser = "ivo"
   const expectedReminderId = 1234
 
-  beforeAll(() => {
-    Context.reset()
-    Context.appsRepo.setApps(["appA", "appB"])
+  beforeEach(async () => {
+    await Context.reset()
+    await Context.appsRepo.add("appA", "appB")
 
     returnApp = ReturnApp({
       appsRepo: Context.appsRepo,
@@ -22,15 +22,15 @@ describe('ReturnApp', () => {
       notifier: Context.notifier,
       messages: Context.messages
     })
-  })
 
-  beforeEach(async () => {
     await Context.appsRepo.take(takenApp, expectedUser)
     await Context.remindersRepo.add(takenApp, expectedReminderId)
   })
 
-  afterAll(() => { Context.exit() })
-  afterEach(() => { Context.reset() })
+  afterAll(async () => {
+    await Context.reset()
+    Context.exit()
+  })
 
   it('allows a user to return a taken app', async () => {
     const holder = await Context.appsRepo.holder(takenApp)

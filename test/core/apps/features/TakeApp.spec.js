@@ -5,9 +5,9 @@ import { AppDoesNotExist, AppIsTaken } from '#/src/core/apps/Errors'
 describe('TakeApp', () => {
   let takeApp = null
 
-  beforeAll(() => {
-    Context.reset()
-    Context.appsRepo.setApps(["appA", "appB"])
+  beforeEach(async () => {
+    await Context.reset()
+    await Context.appsRepo.add("appA", "appB")
 
     takeApp = TakeApp({
       appsRepo: Context.appsRepo,
@@ -18,8 +18,10 @@ describe('TakeApp', () => {
     })
   })
 
-  afterAll(() => { Context.exit() })
-  afterEach(() => { Context.reset() })
+  afterAll(async () => {
+    await Context.reset()
+    Context.exit()
+  })
 
   it('allows a user to take an app', async () => {
     await takeApp("appA", "ivo")

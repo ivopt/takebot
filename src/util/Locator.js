@@ -31,7 +31,7 @@ export const Locator = () => {
     onExit: tap((callback) => self.__onExit.push(callback)),
     onReset: tap((callback) => self.__onReset.push(callback)),
     exit: () => { self.__onExit.forEach(callback => callback()) },
-    reset: () => { self.__onReset.forEach(callback => callback()) }
+    reset: () => Promise.all(self.__onReset.map(async callback => await callback()))
   }
 
   self.__onExit = []

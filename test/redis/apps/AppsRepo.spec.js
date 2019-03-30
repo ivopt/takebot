@@ -2,25 +2,78 @@ import redis from '#/src/redis/PromiseRedis'
 import AppsRepo from '#/src/redis/apps/AppsRepo'
 
 describe('AppsRepo', () => {
-  const AppsRepoKey = "TakeBot"
+  const AppsRepoKey = "TakeBot:apps"
   const TakenAppsKey = `${AppsRepoKey}:taken`
-  let apps = ["appA", "appB"]
+  // let apps = ["appA", "appB"]
   let redisClient
   let subject
 
   beforeAll(() => { redisClient = redis.createClient({url: process.env.REDIS_URL}) })
   afterAll(() => { redisClient.quit() })
 
-  afterEach(async () => {
-    const keys = await redisClient.keys(`${AppsRepoKey}*`)
-    keys.forEach(async key => await redisClient.del(key))
+  afterEach(async () => await redisClient.flushall())
+  beforeEach(() => { subject = new AppsRepo(redisClient, "TakeBot") })
+
+  describe('#add', () => {
+    it('adds an app to the repo', async () => {
+      await subject.add('appZZ')
+      expect(await subject.list()).toContain('appZZ')
+    })
+
+    it('adds multiple apps to the repo', async () => {
+      await subject.add('appZZ', 'appXX')
+      const list = await subject.list()
+      expect(list).toContain('appZZ')
+      expect(list).toContain('appXX')
+    })
+
+    it('adding an already existing app takes no effect', async () => {
+      await subject.add('appYY')
+      await subject.add('appYY')
+
+      const applist = (await subject.list()).filter(a => a == 'appYY')
+      expect(applist.length).toEqual(1)
+    })
   })
 
-  beforeEach(() => { subject = new AppsRepo(redisClient, "TakeBot", apps) })
+  describe('#remove', () => {
+    it('removes an app from the repo', async () => {
+      await subject.add('appA')
+      expect(await subject.list()).toContain('appA')
+
+      await subject.remove('appA')
+      expect(await subject.list()).not.toContain('appA')
+    })
+
+    it('removes multiple apps from the repo', async () => {
+      await subject.add('appA', 'appB', 'appC')
+      const listBefore = await subject.list()
+      expect(listBefore).toContain('appA')
+      expect(listBefore).toContain('appB')
+      expect(listBefore).toContain('appC')
+
+      await subject.remove('appA', 'appB')
+      const listAfter = await subject.list()
+      expect(listAfter).not.toContain('appA')
+      expect(listAfter).not.toContain('appB')
+      expect(listAfter).toContain('appC')
+    })
+
+    it('removing a non existing app takes no effect', async () => {
+      const listBefore = await subject.list()
+      await subject.remove('appA')
+      const listAfter = await subject.list()
+
+      expect(listAfter).toEqual(listBefore)
+    })
+  })
 
   describe('#list', () => {
     it('returns the list of apps given', async () => {
-      expect(await subject.list()).toEqual(apps)
+      await redisClient.sadd(AppsRepoKey, 'appA', 'appB')
+      const list = await subject.list()
+      expect(list).toContain('appA')
+      expect(list).toContain('appB')
     })
   })
 
@@ -84,5 +137,9 @@ describe('AppsRepo', () => {
         "app4": "user2",
       })
     })
+  })
+
+  describe('#appStatus', () => {
+    // TODO: this
   })
 })

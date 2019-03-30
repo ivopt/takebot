@@ -43,8 +43,8 @@ locator.singleton('redisClient', PromiseRedis.createClient({url: process.env['RE
        .onExit(() => {
          locator.redisClient.quit()
        })
-       .onReset(() => {
-         locator.redisClient.flushall()
+       .onReset(async () => {
+         await locator.redisClient.flushall()
          locator.notifier.reset()
          locator.remindersRepo.reset()
        })

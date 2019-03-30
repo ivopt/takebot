@@ -1,21 +1,21 @@
 import IAppsRepo from "../../core/apps/IAppsRepo"
 
 export default class AppsRepo extends IAppsRepo {
-  // TODO: Apps list should actually be persisted - this would enable app crashes
-  //       and restarts to be seamless.
-  //       This would also present with the challenge of managing existing apps.
-
-  constructor(redisClient, rootKey, apps = []) {
+  constructor(redisClient, rootKey) {
     super()
     this.redisClient = redisClient
-    this.appsKey = `${rootKey}:taken`
-    this.apps = apps
+    this.appsKey = `${rootKey}:apps`
+    this.takenAppsKey = `${this.appsKey}:taken`
   }
 
-  setApps = (apps) => this.apps = apps
-  list = () => Promise.resolve(this.apps)
-  take = (app, user) => this.redisClient.hset(this.appsKey, app, user)
-  release = (app) => this.redisClient.hdel(this.appsKey, app)
-  holder = (app) => this.redisClient.hget(this.appsKey, app)
-  status = () => this.redisClient.hgetall(this.appsKey)
+  add    = (...apps) => Promise.all(apps.map(app => this.redisClient.sadd(this.appsKey, app)))
+  remove = (...apps) => Promise.all(apps.map(app => this.redisClient.srem(this.appsKey, app)))
+  list   = () => this.redisClient.smembers(this.appsKey)
+
+  take = (app, user) => this.redisClient.hset(this.takenAppsKey, app, user)
+  release = (app) => this.redisClient.hdel(this.takenAppsKey, app)
+  holder = (app) => this.redisClient.hget(this.takenAppsKey, app)
+  status = () => this.redisClient.hgetall(this.takenAppsKey)
+  // TODO: implement appStatus
+  // appStatus = (app)       => Promise.reject("Not Implemented!")
 }

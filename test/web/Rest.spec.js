@@ -11,12 +11,15 @@ describe('Rest', () => {
   }
   const app = () => TestExpressApp().use(Rest(Context, config))
 
-  beforeEach(() => {
-    Context.reset()
-    Context.appsRepo.setApps(['appA', 'appB'])
+  beforeEach(async () => {
+    await Context.reset()
+    await Context.appsRepo.add('appA', 'appB')
   })
-  afterAll(() => { Context.exit() })
-  afterEach(() => { Context.reset() })
+
+  afterAll(async () => {
+    await Context.reset()
+    Context.exit()
+  })
 
   describe('Authorization', () => {
     it('responds with a 401 if auth not provided', async () => {
