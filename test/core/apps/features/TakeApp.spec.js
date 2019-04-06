@@ -9,13 +9,7 @@ describe('TakeApp', () => {
     await Context.reset()
     await Context.appsRepo.add("appA", "appB")
 
-    takeApp = TakeApp({
-      appsRepo: Context.appsRepo,
-      remindersRepo: Context.remindersRepo,
-      notifier: Context.notifier,
-      messages: Context.messages,
-      remindIn: 1
-    })
+    takeApp = Context.buildFn(TakeApp, {remindIn: 1})
   })
 
   afterAll(async () => {

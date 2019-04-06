@@ -28,18 +28,13 @@ class MockedNotifier extends ITakeNotifier {
 }
 
 const locator = Locator()
-locator.singleton('redisClient', PromiseRedis.createClient({url: process.env['REDIS_URL']}))
-       .singleton('appsRepo', new AppsRepo(locator.redisClient, process.env['ROOT_KEY']))
-       .singleton('remindersRepo', new RemindersRepo())
-       .singleton('notifier', new MockedNotifier())
-       .singleton('messages', Messages)
-       .fnFactory('takeApp',
-                  TakeApp,
-                  ['appsRepo', 'remindersRepo', 'notifier', 'messages'],
-                  { remindIn: 1000 })
-       .fnFactory('returnApp',
-                  ReturnApp,
-                  ['appsRepo', 'remindersRepo', 'notifier', 'messages'])
+locator.singleton(PromiseRedis.createClient({url: process.env['REDIS_URL']}), {name: 'redisClient'})
+       .singleton(Messages, {name: 'messages'})
+       .singleton(new AppsRepo(locator.redisClient, process.env['ROOT_KEY']))
+       .singleton(new RemindersRepo())
+       .singleton(new MockedNotifier(), {name: 'notifier'})
+       .fnFactory(TakeApp, { args: { remindIn: 1000 } })
+       .fnFactory(ReturnApp, { name: 'returnApp' })
        .onExit(() => {
          locator.redisClient.quit()
        })
