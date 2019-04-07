@@ -50,7 +50,7 @@ describe('ReturnApp', () => {
     await returnApp("appA", "ivo")
     const notifications = Context.notifier.teamNotifications
     expect(notifications.length).toEqual(1)
-    expect(notifications[0].message).toEqual("ivo has returned `appA`")
+    expect(notifications[0].message).toMatch("ivo has returned `appA`")
   })
 
   it('fails if the app does not exist', async () => {

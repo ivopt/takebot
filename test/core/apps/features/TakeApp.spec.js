@@ -33,7 +33,7 @@ describe('TakeApp', () => {
     await takeApp("appA", "ivo")
     const notifications = Context.notifier.teamNotifications
     expect(notifications.length).toEqual(1)
-    expect(notifications[0].message).toEqual("ivo has taken `appA`")
+    expect(notifications[0].message).toMatch("ivo has taken `appA`")
   })
 
   it('when an app does not exist, fails and warns the app does not exist', async () => {
