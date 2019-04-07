@@ -1,3 +1,5 @@
+import fnArgs from 'fn-args'
+
 export const Locator = () => {
   const valid = (name) => {
     if (!name) throw new Error('You must provide a valid name for this service.')
@@ -6,32 +8,37 @@ export const Locator = () => {
     return true
   }
 
-  const contextProp = (obj, prop) => Object.assign(obj, {[prop]: self[prop]})
-  const getArgs = (injected, grounded) => injected.reduce(contextProp, grounded)
-  const fnFactory    = (fn, ...args) => () =>     fn(getArgs(...args))
-  const classFactory = (fn, ...args) => () => new fn(getArgs(...args))
+  const instantiantize = (name) => name.replace(/^./, (char) => char.toLowerCase())
+  const chain = (fn) => (...args) => { fn(...args); return self }
 
-  const tap = (fn) => (...args) => { fn(...args); return self }
+  const getArgs = (args, grounded) => args.map(arg => grounded[arg] || self[arg])
+  const fnFactory = (fn, groundedArgs) => () => fn(...getArgs(fnArgs(fn), groundedArgs))
 
   const register = (name, factory) => {
     if (valid(name))
       Object.defineProperty(self, name, { configurable: false, get: factory })
   }
 
+  const fnName = (name, fn) => name || instantiantize(fn.name)
+  const serviceName = (name, service) => name || instantiantize(service.constructor.name)
+
   const self = {
-    fnFactory: tap((name, fn, injectedArgs = [], groundedArgs = {}) =>
-      register(name, fnFactory(fn, injectedArgs, groundedArgs))
-    ),
+    fnFactory: chain((fn, {args = {}, name} = {}) =>
+      register(fnName(name, fn), fnFactory(fn, args))),
 
-    classFactory: tap((name, fn, injectedArgs = [], groundedArgs = {}) =>
-      register(name, classFactory(fn, injectedArgs, groundedArgs))
-    ),
+    singleton: chain((service, {name} = {}) =>
+      register(serviceName(name, service), () => service)),
 
-    singleton: tap((name, service) => register(name, () => service)),
-    onExit: tap((callback) => self.__onExit.push(callback)),
-    onReset: tap((callback) => self.__onReset.push(callback)),
+    lazySingleton: chain(() => {}),
+    // classFactory: chain((name, fn, injectedArgs = [], groundedArgs = {}) =>
+    //   register(name, classFactory(fn, injectedArgs, groundedArgs))),
+
+    onExit: chain((callback) => self.__onExit.push(callback)),
+    onReset: chain((callback) => self.__onReset.push(callback)),
     exit: () => { self.__onExit.forEach(callback => callback()) },
-    reset: () => Promise.all(self.__onReset.map(async callback => await callback()))
+    reset: () => Promise.all(self.__onReset.map(async callback => await callback())),
+
+    buildFn: (fn, args = {}) => fnFactory(fn, args)(),
   }
 
   self.__onExit = []

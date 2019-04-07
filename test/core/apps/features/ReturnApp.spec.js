@@ -16,12 +16,7 @@ describe('ReturnApp', () => {
     await Context.reset()
     await Context.appsRepo.add("appA", "appB")
 
-    returnApp = ReturnApp({
-      appsRepo: Context.appsRepo,
-      remindersRepo: Context.remindersRepo,
-      notifier: Context.notifier,
-      messages: Context.messages
-    })
+    returnApp = Context.buildFn(ReturnApp)
 
     await Context.appsRepo.take(takenApp, expectedUser)
     await Context.remindersRepo.add(takenApp, expectedReminderId)
