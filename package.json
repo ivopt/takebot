@@ -9,7 +9,7 @@
     "build": "yarn clear && babel src -d dist",
     "buildDev": "babel src -d dist --source-maps",
     "takebot": "yarn build && takebot",
-    "test": "jest"
+    "test": "jest --runInBand"
   },
   "author": "LynxEyes",
   "license": "MIT",
