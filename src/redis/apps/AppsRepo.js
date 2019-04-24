@@ -1,4 +1,5 @@
 import IAppsRepo from "../../core/apps/IAppsRepo"
+import { coalesce } from "../helpers"
 
 export default class AppsRepo extends IAppsRepo {
   constructor(redisClient, rootKey) {
@@ -16,6 +17,7 @@ export default class AppsRepo extends IAppsRepo {
   release = (app) => this.redisClient.hdel(this.takenAppsKey, app)
   holder = (app) => this.redisClient.hget(this.takenAppsKey, app)
   status = () => this.redisClient.hgetall(this.takenAppsKey)
+                                 .then(coalesce({}))
   // TODO: implement appStatus
   // appStatus = (app)       => Promise.reject("Not Implemented!")
 }

@@ -121,21 +121,22 @@ describe('AppsRepo', () => {
   })
 
   describe('#status', () => {
-    beforeEach(async () => {
+    it('reports all taken apps', async () => {
       await redisClient.hset(TakenAppsKey, "app1", "user1")
       await redisClient.hset(TakenAppsKey, "app2", "user3")
       await redisClient.hset(TakenAppsKey, "app3", "user3")
       await redisClient.hset(TakenAppsKey, "app4", "user2")
-    })
 
-    it('', async () => {
-      const status =
       expect(await subject.status()).toMatchObject({
         "app1": "user1",
         "app2": "user3",
         "app3": "user3",
         "app4": "user2",
       })
+    })
+
+    it('when there are no taken apps, coalesces to an empty map', async () => {
+      expect(await subject.status()).toMatchObject({})
     })
   })
 
