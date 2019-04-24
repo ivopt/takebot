@@ -47,16 +47,6 @@ describe('Rest', () => {
   })
 
   describe('Allows', () => {
-    // const helpers = {
-    //   takeapp: async (server, app, user) => {
-    //     await request(server)
-    //           .post('/take')
-    //           .send({user, app })
-    //           .set('Authorization', validAuth)
-    //           .set('Content-Type', 'application/json')
-    //   }
-    // }
-
     it('a user to take an available app', async () => {
       await request(server())
               .post('/take')
@@ -77,15 +67,14 @@ describe('Rest', () => {
               .expect(200, { text: 'You have returned appA' })
     })
 
-    // TODO: This!
-    it.only('a user to get a status of all apps', async () => {
+    it('a user to get a status of all apps', async () => {
       await Context.takeApp('appA', 'jack')
 
       await request(server())
               .get('/status')
               .set('Authorization', validAuth)
               .set('Content-Type', 'application/json')
-              .expect(200, { appA: 'taken by jack', appB: 'is free' })
+              .expect(200, { appA: '⛔ taken by jack', appB: '✅ is free' })
     })
   })
 
@@ -93,7 +82,7 @@ describe('Rest', () => {
     it('to take a taken app', async () => {
       await Context.takeApp('appA', 'somedude')
 
-      await request()
+      await request(server())
               .post('/take')
               .send({user: 'john', app: 'appA'})
               .set('Authorization', validAuth)
