@@ -3,7 +3,7 @@ export default (
   messages
 ) => async (ctx = {}) => {
   const appList = await appsRepo.list()
-  const takenApps = await appsRepo.status()
+  const takenApps = await appsRepo.takenApps()
   const selectMessage = (st) =>
     st ? messages.appTakenBy(st) : messages.appIsFree()
 

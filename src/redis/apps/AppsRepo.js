@@ -16,8 +16,8 @@ export default class AppsRepo extends IAppsRepo {
   take = (app, user) => this.redisClient.hset(this.takenAppsKey, app, user)
   release = (app) => this.redisClient.hdel(this.takenAppsKey, app)
   holder = (app) => this.redisClient.hget(this.takenAppsKey, app)
-  status = () => this.redisClient.hgetall(this.takenAppsKey)
-                                 .then(coalesce({}))
+  takenApps = () => this.redisClient.hgetall(this.takenAppsKey)
+                                    .then(coalesce({}))
   // TODO: implement appStatus
   // appStatus = (app)       => Promise.reject("Not Implemented!")
 }

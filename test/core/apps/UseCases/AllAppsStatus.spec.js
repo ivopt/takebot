@@ -5,7 +5,7 @@ describe('AllAppsStatus', () => {
 
   const mockedAppRepo = {
     list: () => Promise.resolve(existingApps),
-    status: () => Promise.resolve({'appA': 'jack'})
+    takenApps: () => Promise.resolve({'appA': 'jack'})
   }
 
   const messages = {

@@ -6,6 +6,6 @@ export default class IAppsRepo {
   take      = (app, user) => Promise.reject("Not Implemented!")
   release   = (app)       => Promise.reject("Not Implemented!")
   holder    = (app)       => Promise.reject("Not Implemented!")
-  status    = ()          => Promise.reject("Not Implemented!")
+  takenApps = ()          => Promise.reject("Not Implemented!")
   appStatus = (app)       => Promise.reject("Not Implemented!")
 }

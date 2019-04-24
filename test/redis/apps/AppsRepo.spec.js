@@ -4,7 +4,6 @@ import AppsRepo from '#/src/redis/apps/AppsRepo'
 describe('AppsRepo', () => {
   const AppsRepoKey = "TakeBot:apps"
   const TakenAppsKey = `${AppsRepoKey}:taken`
-  // let apps = ["appA", "appB"]
   let redisClient
   let subject
 
@@ -120,14 +119,14 @@ describe('AppsRepo', () => {
     })
   })
 
-  describe('#status', () => {
+  describe('#takenApps', () => {
     it('reports all taken apps', async () => {
       await redisClient.hset(TakenAppsKey, "app1", "user1")
       await redisClient.hset(TakenAppsKey, "app2", "user3")
       await redisClient.hset(TakenAppsKey, "app3", "user3")
       await redisClient.hset(TakenAppsKey, "app4", "user2")
 
-      expect(await subject.status()).toMatchObject({
+      expect(await subject.takenApps()).toMatchObject({
         "app1": "user1",
         "app2": "user3",
         "app3": "user3",
@@ -136,7 +135,7 @@ describe('AppsRepo', () => {
     })
 
     it('when there are no taken apps, coalesces to an empty map', async () => {
-      expect(await subject.status()).toMatchObject({})
+      expect(await subject.takenApps()).toMatchObject({})
     })
   })
 
