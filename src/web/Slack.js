@@ -16,7 +16,13 @@ export default (Context, config, router = new Router()) => {
     const command = new Command(req.body.user_name, req.body.text)
 
     command.run(Context)
-      .then(({app}) => res.json(userResponse(`You have taken ${app}`)))
+      .then(ctx => {
+        const response = respondToSlack(command, ctx)
+        if (response)
+          res.json(userResponse(response))
+        else
+          res.status(200).end()
+      })
       .catch((error) => res.json(userResponse(error.message)))
   })
 
@@ -25,3 +31,18 @@ export default (Context, config, router = new Router()) => {
 
 // HELPERS
 const userResponse = (text) => ({ response_type: "ephemeral", text })
+
+const respondToSlack = (command, ctx) => {
+  switch (command.name) {
+    case 'take':
+      return null // `You have taken ${ctx.app}`
+
+    case 'return':
+      return null // `You have returned ${ctx.app}`
+
+    case 'status':
+      return Object.entries(ctx.status)
+                   .map(([app, status]) => `• \`${app}\` - ${status}`)
+                   .join("\n")
+  }
+}
