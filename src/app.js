@@ -2,7 +2,8 @@ import './env.config'
 import Context from './Context'
 import server from './web/server'
 
-Context.appsRepo.add("appA", "appB")
+const apps = process.env["APPS"].split(",")
+Context.appsRepo.add(...apps)
 const config = {
   env: process.env
 }
