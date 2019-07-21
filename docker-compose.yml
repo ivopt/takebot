@@ -25,11 +25,14 @@ services:
     command: ["bin/takebot"]
     environment:
       HISTFILE: "/config/.bash_history"
+      CHOKIDAR_USEPOLLING: "true"
     links:
       - redis
     volumes:
       - 'takebot-sync:/app:nocopy'
       - 'takebot-config:/config'
     ports:
-      - "3000:3000"
+      - "3000:3000" # express
+      - "1234:1234" # parcel
+      - "2345:2345" # parcel ws
     working_dir: /app
