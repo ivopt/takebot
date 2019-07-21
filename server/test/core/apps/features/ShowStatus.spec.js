@@ -20,8 +20,15 @@ describe('ShowStatus', () => {
   it('', async () => {
     const { status } = await showStatus()
     expect(status).toEqual({
-      "appA": Context.messages.appTakenBy("jack"),
-      "appB": Context.messages.appIsFree()
+      appA: {
+        message: "⛔ taken by jack",
+        status: "taken",
+        user: "jack",
+      },
+      appB: {
+        message: "✅ is free",
+        status: "free",
+      }
     })
   })
 })

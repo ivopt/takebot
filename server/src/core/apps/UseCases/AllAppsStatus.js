@@ -4,12 +4,18 @@ export default (
 ) => async (ctx = {}) => {
   const appList = await appsRepo.list()
   const takenApps = await appsRepo.takenApps()
-  const selectMessage = (st) =>
+  const message = (st) =>
     st ? messages.appTakenBy(st) : messages.appIsFree()
+  const appStatus = (st) => st ? 'taken' : 'free'
 
   const status = appList.reduce((acc, app) =>
-    Object.assign(acc, {[app]: selectMessage(takenApps[app])})
-  , {})
+    Object.assign(acc, {
+      [app]: {
+        status: appStatus(takenApps[app]),
+        user: takenApps[app],
+        message: message(takenApps[app])
+      }
+    }), {})
 
   return { status, ...ctx }
 }

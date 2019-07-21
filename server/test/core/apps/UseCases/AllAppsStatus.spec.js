@@ -20,21 +20,29 @@ describe('AllAppsStatus', () => {
     expect(Object.keys(status)).toEqual(existingApps)
   })
 
-  it('taken apps use the `appTakenBy` message', async () => {
+  it('taken apps use the `appTakenBy` message and the user who took it', async () => {
     const { status } = await allAppsStatus()
-    expect(status['appA']).toEqual(messages.appTakenBy('jack'))
+    expect(status['appA'].message).toEqual(messages.appTakenBy('jack'))
+    expect(status['appA'].user).toEqual('jack')
   })
 
   it('free apps use the `appIsFree` message', async () => {
     const { status } = await allAppsStatus()
-    expect(status['appB']).toEqual(messages.appIsFree())
+    expect(status['appB'].message).toEqual(messages.appIsFree())
   })
 
   it('has a message for each app, given its status', async () => {
     const { status } = await allAppsStatus()
     expect(status).toEqual({
-      'appA': messages.appTakenBy('jack'),
-      'appB': messages.appIsFree()
+      appA: {
+        message: messages.appTakenBy('jack'),
+        status: "taken",
+        user: "jack",
+      },
+      appB: {
+        message: messages.appIsFree(),
+        status: "free",
+      }
     })
   })
 })

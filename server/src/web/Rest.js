@@ -1,4 +1,5 @@
 import { Router } from 'express'
+import cors from 'cors'
 
 export default (Context, config, router = new Router()) => {
   const validBasicAuth = (authHeader) => {
@@ -7,6 +8,8 @@ export default (Context, config, router = new Router()) => {
     const [,auth] = authHeader.match(/.*: (.*)/)
     return auth == config.env['REST_VERIFICATION_TOKEN']
   }
+
+  router.use(cors())
 
   router.use((req, res, next) => {
     if (!validBasicAuth(req.headers["authorization"]))

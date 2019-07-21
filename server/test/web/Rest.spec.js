@@ -74,7 +74,10 @@ describe('Rest', () => {
               .get('/status')
               .set('Authorization', validAuth)
               .set('Content-Type', 'application/json')
-              .expect(200, { appA: '⛔ taken by jack', appB: '✅ is free' })
+              .expect(200, {
+                appA: { status: 'taken', user: 'jack', message: '⛔ taken by jack'},
+                appB: { status: 'free', message: '✅ is free' }
+              })
     })
   })
 
