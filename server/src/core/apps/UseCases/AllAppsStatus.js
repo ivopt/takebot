@@ -9,13 +9,12 @@ export default (
   const appStatus = (st) => st ? 'taken' : 'free'
 
   const status = appList.reduce((acc, app) =>
-    Object.assign(acc, {
-      [app]: {
-        status: appStatus(takenApps[app]),
-        user: takenApps[app],
-        message: message(takenApps[app])
-      }
-    }), {})
+    acc.concat({
+      id: app,
+      status: appStatus(takenApps[app]),
+      user: takenApps[app],
+      message: message(takenApps[app])
+    }), [])
 
   return { status, ...ctx }
 }

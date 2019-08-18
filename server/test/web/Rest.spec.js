@@ -3,6 +3,8 @@ import Rest from '#/src/web/Rest'
 import Context from '#/test/support/TestContext'
 import TestExpressApp from '#/test/support/TestExpressApp'
 
+const arrayContaining = expect.arrayContaining
+
 describe('Rest', () => {
   const config = {
     env: {
@@ -73,10 +75,14 @@ describe('Rest', () => {
       await request(server())
               .get('/status')
               .set('Authorization', validAuth)
-              .set('Content-Type', 'application/json')
-              .expect(200, {
-                appA: { status: 'taken', user: 'jack', message: '⛔ taken by jack'},
-                appB: { status: 'free', message: '✅ is free' }
+              .set('Accept', 'application/json')
+              .expect(200)
+              .then((response) => JSON.parse(response.text))
+              .then(jsonResponse => {
+                expect(jsonResponse).toEqual(arrayContaining([
+                  { id: 'appA', status: 'taken', user: 'jack', message: '⛔ taken by jack'},
+                  { id: 'appB', status: 'free', message: '✅ is free' }
+                ]))
               })
     })
   })

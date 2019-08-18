@@ -1,5 +1,7 @@
 import AllAppsStatus from '#/src/core/apps/UseCases/AllAppsStatus'
 
+const arrayContaining = expect.arrayContaining
+
 describe('AllAppsStatus', () => {
   const existingApps = ['appA', 'appB']
 
@@ -17,32 +19,40 @@ describe('AllAppsStatus', () => {
 
   it('includes the status of all known apps', async () => {
     const { status } = await allAppsStatus()
-    expect(Object.keys(status)).toEqual(existingApps)
+    const allIds = status.reduce((acc, {id}) => acc.concat(id), [])
+
+    expect(allIds).toEqual(existingApps)
   })
 
   it('taken apps use the `appTakenBy` message and the user who took it', async () => {
     const { status } = await allAppsStatus()
-    expect(status['appA'].message).toEqual(messages.appTakenBy('jack'))
-    expect(status['appA'].user).toEqual('jack')
+    const appA = status.find(({id}) => id == 'appA')
+
+    expect(appA.message).toEqual(messages.appTakenBy('jack'))
+    expect(appA.user).toEqual('jack')
   })
 
   it('free apps use the `appIsFree` message', async () => {
     const { status } = await allAppsStatus()
-    expect(status['appB'].message).toEqual(messages.appIsFree())
+    const appB = status.find(({id}) => id == 'appB')
+
+    expect(appB.message).toEqual(messages.appIsFree())
   })
 
   it('has a message for each app, given its status', async () => {
     const { status } = await allAppsStatus()
-    expect(status).toEqual({
-      appA: {
+
+    expect(status).toEqual(arrayContaining([
+      {
+        id: 'appA',
         message: messages.appTakenBy('jack'),
         status: "taken",
         user: "jack",
-      },
-      appB: {
+      },{
+        id: 'appB',
         message: messages.appIsFree(),
         status: "free",
       }
-    })
+    ]))
   })
 })

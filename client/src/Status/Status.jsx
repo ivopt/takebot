@@ -1,17 +1,18 @@
 import React from 'react'
-import { Table } from 'react-bootstrap'
+import { Table, Button } from 'react-bootstrap'
 
-import { fetchStatus }   from './Service'
+import { fetchStatus } from './Service'
 
 export default class Status extends React.Component {
   constructor(props) {
     super(props)
     this.state = { apps: [] }
+    this.refresh = this.refresh.bind(this);
   }
 
-  componentWillMount() {
-    fetchStatus().then((apps) => this.setState({apps}))
-  }
+  componentWillMount() { this.refresh() }
+
+  refresh() { fetchStatus().then((apps) => this.setState({apps})) }
 
   render() {
     return (
@@ -26,15 +27,16 @@ export default class Status extends React.Component {
             </tr>
           </thead>
           <tbody>
-            {this.state.apps.map(({app, status, user}) => (
-              <tr key={app}>
-                <td>{app}</td>
+            {this.state.apps.map(({id, status, user}) => (
+              <tr key={id}>
+                <td>{id}</td>
                 <td>{status}</td>
                 <td>{user}</td>
               </tr>
             ))}
           </tbody>
         </Table>
+        <Button className="float-right" variant="success" onClick={this.refresh}>Refresh</Button>
       </React.Fragment>
     )
   }

@@ -1,6 +1,8 @@
 import Context from '#/test/support/TestContext'
 import ShowStatus from '#/src/core/apps/features/ShowStatus'
 
+const arrayContaining = expect.arrayContaining
+
 describe('ShowStatus', () => {
   let showStatus
 
@@ -19,16 +21,17 @@ describe('ShowStatus', () => {
 
   it('', async () => {
     const { status } = await showStatus()
-    expect(status).toEqual({
-      appA: {
+    expect(status).toEqual(arrayContaining([
+      {
+        id: 'appA',
         message: "⛔ taken by jack",
         status: "taken",
         user: "jack",
-      },
-      appB: {
+      },{
+        id: 'appB',
         message: "✅ is free",
         status: "free",
       }
-    })
+    ]))
   })
 })
