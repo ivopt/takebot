@@ -9,6 +9,7 @@ import SlackbotNotifier from './slackbot/SlackbotNotifier'
 import TakeApp from './core/apps/features/TakeApp'
 import ReturnApp from './core/apps/features/ReturnApp'
 import ShowStatus from './core/apps/features/ShowStatus'
+import ListApps from './core/apps/features/ListApps'
 
 const locator = Locator()
 locator.singleton(PromiseRedis.createClient({url: process.env['REDIS_URL']}), {name: 'redisClient'})
@@ -21,6 +22,7 @@ locator.singleton(PromiseRedis.createClient({url: process.env['REDIS_URL']}), {n
        .fnFactory(TakeApp, { args: { remindIn: 1000 } })
        .fnFactory(ReturnApp, { name: 'returnApp' })
        .fnFactory(ShowStatus)
+       .fnFactory(ListApps)
        .onExit(() => {
          locator.redisClient.quit()
        })

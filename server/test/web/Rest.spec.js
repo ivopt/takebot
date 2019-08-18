@@ -85,6 +85,21 @@ describe('Rest', () => {
                 ]))
               })
     })
+
+    it('a user to list all apps', async () => {
+      await request(server())
+              .get('/list')
+              .set('Authorization', validAuth)
+              .set('Accept', 'application/json')
+              .expect(200)
+              .then((response) => JSON.parse(response.text))
+              .then(jsonResponse => {
+                expect(jsonResponse).toEqual(arrayContaining([
+                  { id: 'appA' },
+                  { id: 'appB' }
+                ]))
+              })
+    })
   })
 
   describe('Refuses', () => {

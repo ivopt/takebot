@@ -39,6 +39,11 @@ export default (Context, config, router = new Router()) => {
            .then(({ status }) => res.json(status))
   })
 
+  router.get('/list', async (_req, res) => {
+    Context.listApps()
+           .then(({ apps }) => res.json(apps))
+  })
+
   return router
 }
 
