@@ -3,7 +3,7 @@ import AllAppsStatus from '#/src/core/apps/UseCases/AllAppsStatus'
 const arrayContaining = expect.arrayContaining
 
 describe('AllAppsStatus', () => {
-  const existingApps = ['appA', 'appB']
+  const existingApps = [{ id: 'appA' }, { id: 'appB'}]
 
   const mockedAppRepo = {
     list: () => Promise.resolve(existingApps),
@@ -21,7 +21,7 @@ describe('AllAppsStatus', () => {
     const { status } = await allAppsStatus()
     const allIds = status.reduce((acc, {id}) => acc.concat(id), [])
 
-    expect(allIds).toEqual(existingApps)
+    expect(allIds).toEqual(existingApps.map(a => a.id))
   })
 
   it('taken apps use the `appTakenBy` message and the user who took it', async () => {

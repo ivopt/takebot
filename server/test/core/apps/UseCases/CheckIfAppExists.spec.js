@@ -3,7 +3,7 @@ import { AppDoesNotExist } from '#/src/core/apps/Errors'
 
 describe('CheckIfAppExists', () => {
   const mockedAppRepo = {
-    list: () => Promise.resolve(["appA", "appB"])
+    list: () => Promise.resolve([{ id: "appA" }, { id: "appB"} ])
   }
   const checkIfAppExists = CheckIfAppExists(mockedAppRepo)
 

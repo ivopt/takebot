@@ -16,6 +16,8 @@ export default {
       hget:      promisify(client.hget).bind(client),
       hset:      promisify(client.hset).bind(client),
       hdel:      promisify(client.hdel).bind(client),
+      hkeys:     promisify(client.hkeys).bind(client),
+      hvals:     promisify(client.hvals).bind(client),
       hgetall:   promisify(client.hgetall).bind(client),
       flushall:  promisify(client.flushall).bind(client),
       quit:      client.quit.bind(client)

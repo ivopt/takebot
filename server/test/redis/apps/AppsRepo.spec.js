@@ -1,6 +1,8 @@
 import redis from '#/src/redis/PromiseRedis'
 import AppsRepo from '#/src/redis/apps/AppsRepo'
 
+const arrayContaining = expect.arrayContaining
+
 describe('AppsRepo', () => {
   const AppsRepoKey = "TakeBot:apps"
   const TakenAppsKey = `${AppsRepoKey}:taken`
@@ -16,21 +18,21 @@ describe('AppsRepo', () => {
   describe('#add', () => {
     it('adds an app to the repo', async () => {
       await subject.add('appZZ')
-      expect(await subject.list()).toContain('appZZ')
+      expect(await subject.list()).toContainEqual({id: 'appZZ'})
     })
 
     it('adds multiple apps to the repo', async () => {
       await subject.add('appZZ', 'appXX')
       const list = await subject.list()
-      expect(list).toContain('appZZ')
-      expect(list).toContain('appXX')
+      expect(list).toContainEqual({id: 'appZZ'})
+      expect(list).toContainEqual({id: 'appXX'})
     })
 
     it('adding an already existing app takes no effect', async () => {
       await subject.add('appYY')
       await subject.add('appYY')
 
-      const applist = (await subject.list()).filter(a => a == 'appYY')
+      const applist = (await subject.list()).filter(a => a.id == 'appYY')
       expect(applist.length).toEqual(1)
     })
   })
@@ -38,24 +40,24 @@ describe('AppsRepo', () => {
   describe('#remove', () => {
     it('removes an app from the repo', async () => {
       await subject.add('appA')
-      expect(await subject.list()).toContain('appA')
+      expect(await subject.list()).toContainEqual({id: 'appA'})
 
       await subject.remove('appA')
-      expect(await subject.list()).not.toContain('appA')
+      expect(await subject.list()).not.toContainEqual({id: 'appA'})
     })
 
     it('removes multiple apps from the repo', async () => {
       await subject.add('appA', 'appB', 'appC')
       const listBefore = await subject.list()
-      expect(listBefore).toContain('appA')
-      expect(listBefore).toContain('appB')
-      expect(listBefore).toContain('appC')
+      expect(listBefore).toContainEqual({id: 'appA'})
+      expect(listBefore).toContainEqual({id: 'appB'})
+      expect(listBefore).toContainEqual({id: 'appC'})
 
       await subject.remove('appA', 'appB')
       const listAfter = await subject.list()
-      expect(listAfter).not.toContain('appA')
-      expect(listAfter).not.toContain('appB')
-      expect(listAfter).toContain('appC')
+      expect(listAfter).not.toContainEqual({id: 'appA'})
+      expect(listAfter).not.toContainEqual({id: 'appB'})
+      expect(listAfter).toContainEqual({id: 'appC'})
     })
 
     it('removing a non existing app takes no effect', async () => {
@@ -69,10 +71,11 @@ describe('AppsRepo', () => {
 
   describe('#list', () => {
     it('returns the list of apps given', async () => {
-      await redisClient.sadd(AppsRepoKey, 'appA', 'appB')
+      await redisClient.hset(AppsRepoKey, 'appA', JSON.stringify({id: 'appA'}))
+      await redisClient.hset(AppsRepoKey, 'appB', JSON.stringify({id: 'appB'}))
+
       const list = await subject.list()
-      expect(list).toContain('appA')
-      expect(list).toContain('appB')
+      expect(list).toEqual(arrayContaining([{id: 'appA'}, {id: 'appB'}]))
     })
   })
 
