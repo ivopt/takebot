@@ -49,7 +49,7 @@ describe('Rest', () => {
   })
 
   describe('Allows', () => {
-    it('a user to take an available app', async () => {
+    it('allows a user to take an available app', async () => {
       await request(server())
               .post('/take')
               .send({user: 'john', app: 'appA'})
@@ -58,7 +58,7 @@ describe('Rest', () => {
               .expect(200, { text: 'You have taken appA' })
     })
 
-    it('a user to return an app he has taken', async () => {
+    it('allows a user to return an app he has taken', async () => {
       await Context.takeApp('appA', 'john')
 
       await request(server())
@@ -69,7 +69,7 @@ describe('Rest', () => {
               .expect(200, { text: 'You have returned appA' })
     })
 
-    it('a user to get a status of all apps', async () => {
+    it('allows a user to get a status of all apps', async () => {
       await Context.takeApp('appA', 'jack')
 
       await request(server())
@@ -86,7 +86,7 @@ describe('Rest', () => {
               })
     })
 
-    it('a user to list all apps', async () => {
+    it('allows a user to list all apps', async () => {
       await request(server())
               .get('/list')
               .set('Authorization', validAuth)
@@ -103,7 +103,7 @@ describe('Rest', () => {
   })
 
   describe('Refuses', () => {
-    it('to take a taken app', async () => {
+    it('refuses to take a taken app', async () => {
       await Context.takeApp('appA', 'somedude')
 
       await request(server())
@@ -115,7 +115,7 @@ describe('Rest', () => {
               .expect({ text: 'App is already taken' })
     })
 
-    it('to return an app that was not taken', async () => {
+    it('refuses to return an app that was not taken', async () => {
       await request(server())
               .post('/return')
               .send({user: 'john', app: 'appA'})
@@ -124,7 +124,7 @@ describe('Rest', () => {
               .expect(403, { text: 'App is not taken' })
     })
 
-    it('to return an app that was not taken by the user', async () => {
+    it('refuses to return an app that was not taken by the user', async () => {
       await Context.takeApp('appA', 'billy')
 
       await request(server())
