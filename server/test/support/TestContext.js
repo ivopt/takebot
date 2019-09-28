@@ -9,6 +9,7 @@ import TakeApp from '#/src/core/apps/features/TakeApp'
 import ReturnApp from '#/src/core/apps/features/ReturnApp'
 import ShowStatus from '#/src/core/apps/features/ShowStatus'
 import ListApps from '#/src/core/apps/features/ListApps'
+import AddApp from '#/src/core/apps/features/AddApp'
 
 // TODO: This is to be used on integration test. We don't wanna hit slack, but we
 //       might wanna hit some faked API of some sort - stubby4node?
@@ -39,6 +40,7 @@ locator.singleton(PromiseRedis.createClient({url: process.env['REDIS_URL']}), {n
        .fnFactory(ReturnApp, { name: 'returnApp' })
        .fnFactory(ShowStatus)
        .fnFactory(ListApps)
+       .fnFactory(AddApp)
        .onExit(() => {
          locator.redisClient.quit()
        })
