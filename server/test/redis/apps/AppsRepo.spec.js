@@ -79,6 +79,18 @@ describe('AppsRepo', () => {
     })
   })
 
+  describe('#exist', () => {
+    it('returns true if a given app exists', async () => {
+      await redisClient.hset(AppsRepoKey, 'appA', JSON.stringify({id: 'appA'}))
+
+      expect(await subject.exist('appA')).toBeTruthy()
+    })
+
+    it('returns false if a given app does not exist', async () => {
+      expect(await subject.exist('appA')).toBeFalsy()
+    })
+  })
+
   describe('#take', () => {
     const app = "appA"
     const expectedUser = "TheUserThatTookIt"
@@ -140,9 +152,5 @@ describe('AppsRepo', () => {
     it('when there are no taken apps, coalesces to an empty map', async () => {
       expect(await subject.takenApps()).toMatchObject({})
     })
-  })
-
-  describe('#appStatus', () => {
-    // TODO: this
   })
 })

@@ -9,9 +9,12 @@ export default class AppsRepo extends IAppsRepo {
     this.takenAppsKey = `${this.appsKey}:taken`
   }
 
-  add    = (...apps) => Promise.all(apps.map(this._addApp))
+  add = (...apps) => Promise.all(apps.map(this._addApp))
   remove = (...apps) => Promise.all(apps.map(this._removeApp))
-  list   = () => this.redisClient.hvals(this.appsKey).then((d) => d.map(JSON.parse))
+  list = () => this.redisClient.hvals(this.appsKey)
+                               .then((d) => d.map(JSON.parse))
+  exist = (appId) => this.list()
+                         .then(findById(appId))
 
   take = (app, user) => this.redisClient.hset(this.takenAppsKey, app, user)
   release = (app) => this.redisClient.hdel(this.takenAppsKey, app)
@@ -23,3 +26,5 @@ export default class AppsRepo extends IAppsRepo {
   _addApp    = (app) => this.redisClient.hset(this.appsKey, app, JSON.stringify({ id: app }))
   _removeApp = (app) => this.redisClient.hdel(this.appsKey, app)
 }
+
+const findById = (id) => (list) => list.find(it => id == it.id)
