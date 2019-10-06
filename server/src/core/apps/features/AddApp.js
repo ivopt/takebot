@@ -14,7 +14,7 @@ export default AddApp
 // Private
 
 const failIfAppAlreadyExists = (appsRepo) => async (ctx) => {
-  if (await appsRepo.exist(ctx.app))
+  if (await appsRepo.exist(ctx.app.name))
     throw new AppAlreadyExists("App already exists")
   return ctx
 }

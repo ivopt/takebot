@@ -8,7 +8,7 @@ describe('ListApps', () => {
 
   beforeEach(async () => {
     await Context.reset()
-    await Context.appsRepo.add("appA", "appB")
+    await Context.appsRepo.add({name: "appA"}, {name: "appB"})
 
     listApps = Context.buildFn(ListApps)
   })
@@ -21,8 +21,8 @@ describe('ListApps', () => {
   it('lists all existing apps ordered by name', async () => {
     const { apps } = await listApps()
     expect(apps).toEqual(arrayContaining([
-      { id: 'appA' },
-      { id: 'appB' }
+      { id: 'appA', name: 'appA'},
+      { id: 'appB', name: 'appB'}
     ]))
   })
 })

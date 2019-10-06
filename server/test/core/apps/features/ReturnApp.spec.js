@@ -14,7 +14,7 @@ describe('ReturnApp', () => {
 
   beforeEach(async () => {
     await Context.reset()
-    await Context.appsRepo.add("appA", "appB")
+    await Context.appsRepo.add({name: "appA"}, {name: "appB"})
 
     returnApp = Context.buildFn(ReturnApp)
 
