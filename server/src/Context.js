@@ -10,6 +10,7 @@ import TakeApp from './core/apps/features/TakeApp'
 import ReturnApp from './core/apps/features/ReturnApp'
 import ShowStatus from './core/apps/features/ShowStatus'
 import ListApps from './core/apps/features/ListApps'
+import AddApp from './core/apps/features/AddApp'
 
 const locator = Locator()
 locator.singleton(PromiseRedis.createClient({url: process.env['REDIS_URL']}), {name: 'redisClient'})
@@ -23,6 +24,7 @@ locator.singleton(PromiseRedis.createClient({url: process.env['REDIS_URL']}), {n
        .fnFactory(ReturnApp, { name: 'returnApp' })
        .fnFactory(ShowStatus)
        .fnFactory(ListApps)
+       .fnFactory(AddApp)
        .onExit(() => {
          locator.redisClient.quit()
        })

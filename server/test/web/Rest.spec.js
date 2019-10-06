@@ -25,7 +25,7 @@ describe('Rest', () => {
 
   beforeEach(async () => {
     await Context.reset()
-    await Context.appsRepo.add('appA', 'appB')
+    await Context.appsRepo.add({name: 'appA'}, {name: 'appB'})
   })
 
   afterAll(async () => {
@@ -100,6 +100,29 @@ describe('Rest', () => {
                 ]))
               })
     })
+
+    it('allows a user to add a new app', async () => {
+      await request(server())
+              .put('/add')
+              .send({name: 'appZ'})
+              .set('Authorization', validAuth)
+              .set('Accept', 'application/json')
+              .expect(200)
+
+      await request(server())
+              .get('/list')
+              .set('Authorization', validAuth)
+              .set('Accept', 'application/json')
+              .expect(200)
+              .then((response) => JSON.parse(response.text))
+              .then(jsonResponse => {
+                expect(jsonResponse).toEqual(arrayContaining([
+                  { id: 'appA' },
+                  { id: 'appB' },
+                  { id: 'appZ' }
+                ]))
+              })
+    })
   })
 
   describe('Refuses', () => {
@@ -133,6 +156,16 @@ describe('Rest', () => {
               .set('Authorization', validAuth)
               .set('Content-Type', 'application/json')
               .expect(403, { text: 'Taken by billy, not you' })
+    })
+
+    it.only('to add an existing app', async () => {
+      await request(server())
+              .put('/add')
+              .send({name: 'appA'})
+              .set('Authorization', validAuth)
+              .set('Accept', 'application/json')
+              .expect(403)
+              .expect({ text: 'App already exists' })
     })
   })
 })

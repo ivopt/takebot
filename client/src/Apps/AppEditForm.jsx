@@ -1,19 +1,20 @@
 import React, { useState } from 'react'
-
 import { Form, Button } from 'react-bootstrap'
 
-const createNewApp = (event) => {
-  event.preventDefault()
-  console.log("Form Submission!!")
-}
+import { addApp } from './Service'
 
 const extractAndCall = (callback) => (event) => {
   console.log("setting state")
   callback(event.target.value)
 }
 
-const AppEditForm = ({history}) => {
+const AppEditForm = ({history, successPath}) => {
   const [name, setName] = useState("")
+
+  const createNewApp = (event) => {
+    event.preventDefault()
+    addApp(name).then(() => history.push(successPath))
+  }
 
   return (
     <React.Fragment>
@@ -25,7 +26,7 @@ const AppEditForm = ({history}) => {
         </Form.Group>
 
         <Button variant="primary" type="submit" className="float-right">Create app</Button>
-        <Button variant="danger" onClick={() => history.push("/apps")}>Cancel</Button>
+        <Button variant="danger" onClick={() => history.push(successPath)}>Cancel</Button>
       </Form>
     </React.Fragment>
   )
