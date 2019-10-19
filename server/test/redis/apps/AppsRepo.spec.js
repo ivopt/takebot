@@ -12,7 +12,7 @@ describe('AppsRepo', () => {
   beforeAll(() => { redisClient = redis.createClient({url: process.env.REDIS_URL}) })
   afterAll(() => { redisClient.quit() })
 
-  afterEach(async () => await redisClient.flushall())
+  afterEach(async () => await redisClient.flushdb())
   beforeEach(() => { subject = new AppsRepo(redisClient, "TakeBot") })
 
   describe('#list', () => {

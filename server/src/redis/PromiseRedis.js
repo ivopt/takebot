@@ -19,7 +19,7 @@ export default {
       hkeys:     promisify(client.hkeys).bind(client),
       hvals:     promisify(client.hvals).bind(client),
       hgetall:   promisify(client.hgetall).bind(client),
-      flushall:  promisify(client.flushall).bind(client),
+      flushdb:  promisify(client.flushdb).bind(client),
       quit:      client.quit.bind(client)
     }
   }

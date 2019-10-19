@@ -29,7 +29,7 @@ locator.singleton(PromiseRedis.createClient({url: process.env['REDIS_URL']}), {n
          locator.redisClient.quit()
        })
        .onReset(async () => {
-         await locator.redisClient.flushall()
+         await locator.redisClient.flushdb()
          locator.notifier.reset()
        })
 
