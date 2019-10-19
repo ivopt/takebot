@@ -8,7 +8,7 @@ export default (Context, config) => {
   const server = express()
   server.use(bodyParser.urlencoded({ extended: false }))
   server.use(bodyParser.json())
-
+  server.use(express.static('public'))
   server.use(WebApp(Context, config))
 
   return {
