@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "",
   "scripts": {
-    "heroku-prebuild": "npm install yarn",
+    "heroku-prebuild": "npm install yarn && cd server && yarn install",
     "heroku-postbuild": "echo 'BANANA'"
   },
   "author": "LynxEyes",
