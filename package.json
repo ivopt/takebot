@@ -4,7 +4,7 @@
   "description": "",
   "scripts": {
     "heroku-prebuild": "npm install yarn && cd server && YARN_PRODUCTION=false yarn install && yarn build",
-    "heroku-postbuild": "cd client && YARN_PRODUCTION=false yarn install && parcel build && cp -r dist/ ../public",
+    "heroku-postbuild": "cd client && YARN_PRODUCTION=false yarn install && yarn build && cp -r dist/ ../public",
     "start": "cd server && node dist/index.js"
   },
   "author": "LynxEyes",
