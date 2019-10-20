@@ -3,8 +3,8 @@
   "version": "1.0.0",
   "description": "",
   "scripts": {
-    "heroku-prebuild": "npm install yarn && cd server && YARN_PRODUCTION=false yarn install && yarn build",
-    "heroku-postbuild": "cd client && YARN_PRODUCTION=false yarn install && yarn build && cp -r dist/ ../server/public",
+    "heroku-prebuild": "sh .heroku/prebuild",
+    "heroku-postbuild": "sh .heroku/build",
     "start": "cd server && node dist/index.js"
   },
   "author": "LynxEyes",

@@ -1,0 +1,9 @@
+#!/bin/sh
+
+npm install yarn
+cd server
+YARN_PRODUCTION=false yarn install
+cd ..
+cd client
+YARN_PRODUCTION=false yarn install
+cd ..
