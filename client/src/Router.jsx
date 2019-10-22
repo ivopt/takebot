@@ -13,7 +13,7 @@ const Router = () => (
     <Navbar bg="dark" expand="lg" variant="dark">
       <BSBrand to="/status">TakeBot Admin</BSBrand>
       <Navbar.Collapse id="basic-navbar-nav">
-        <Nav className="mr-auto">
+        <Nav className="mr-auto navbar-nav">
           <BSNavLink to="/" exact>Home</BSNavLink>
           <BSNavLink to="/status">Status</BSNavLink>
           <BSNavLink to="/apps">Apps</BSNavLink>
