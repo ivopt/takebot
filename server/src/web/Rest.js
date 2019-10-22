@@ -1,22 +1,8 @@
 import { Router } from 'express'
 import cors from 'cors'
 
-export default (Context, config, router = new Router()) => {
-  const validBasicAuth = (authHeader) => {
-    if (!authHeader) return false
-
-    const [,auth] = authHeader.match(/.*: (.*)/)
-    return auth == config.env['REST_VERIFICATION_TOKEN']
-  }
-
+export default (Context, _config = {}, router = new Router()) => {
   router.use(cors())
-
-  router.use((req, res, next) => {
-    if (!validBasicAuth(req.headers["authorization"]))
-      res.status(401).json(userResponse("Invalid credentials"))
-    else
-      next()
-  })
 
   router.post('/take', (req, res) => {
     const { app, user } = req.body

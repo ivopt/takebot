@@ -6,20 +6,13 @@ import TestExpressApp from '#/test/support/TestExpressApp'
 const arrayContaining = expect.arrayContaining
 
 describe('Rest', () => {
-  const config = {
-    env: {
-      'REST_VERIFICATION_TOKEN': 'banana'
-    }
-  }
-  const validAuth = 'basic: banana'
-  const server = () => TestExpressApp().use(Rest(Context, config))
+  const server = () => TestExpressApp().use(Rest(Context))
 
   const helpers = {
     takeApp: async (serverApp, user, appName) => {
       await request(serverApp)
               .post('/take')
               .send({user, app: appName})
-              .set('Authorization', validAuth)
     }
   }
 
@@ -33,27 +26,11 @@ describe('Rest', () => {
     Context.exit()
   })
 
-  describe('Authorization', () => {
-    it('responds with a 401 if auth not provided', async () => {
-      await request(server())
-              .get('/')
-              .expect(401)
-    })
-
-    it('responds with a 401 if auth is invalid', async () => {
-      await request(server())
-              .get('/')
-              .set('Authorization', 'basic: wrong')
-              .expect(401)
-    })
-  })
-
   describe('Allows', () => {
     it('allows a user to take an available app', async () => {
       await request(server())
               .post('/take')
               .send({user: 'john', app: 'appA'})
-              .set('Authorization', validAuth)
               .set('Content-Type', 'application/json')
               .expect(200, { text: 'You have taken appA' })
     })
@@ -64,7 +41,6 @@ describe('Rest', () => {
       await request(server())
               .post('/return')
               .send({user: 'john', app: 'appA'})
-              .set('Authorization', validAuth)
               .set('Content-Type', 'application/json')
               .expect(200, { text: 'You have returned appA' })
     })
@@ -74,7 +50,6 @@ describe('Rest', () => {
 
       await request(server())
               .get('/status')
-              .set('Authorization', validAuth)
               .set('Accept', 'application/json')
               .expect(200)
               .then((response) => JSON.parse(response.text))
@@ -89,14 +64,13 @@ describe('Rest', () => {
     it('allows a user to list all apps', async () => {
       await request(server())
               .get('/list')
-              .set('Authorization', validAuth)
               .set('Accept', 'application/json')
               .expect(200)
               .then((response) => JSON.parse(response.text))
               .then(jsonResponse => {
                 expect(jsonResponse).toEqual(arrayContaining([
-                  { id: 'appA' },
-                  { id: 'appB' }
+                  { id: 'appA', name: 'appA' },
+                  { id: 'appB', name: 'appB' }
                 ]))
               })
     })
@@ -105,21 +79,19 @@ describe('Rest', () => {
       await request(server())
               .put('/add')
               .send({name: 'appZ'})
-              .set('Authorization', validAuth)
               .set('Accept', 'application/json')
               .expect(200)
 
       await request(server())
               .get('/list')
-              .set('Authorization', validAuth)
               .set('Accept', 'application/json')
               .expect(200)
               .then((response) => JSON.parse(response.text))
               .then(jsonResponse => {
                 expect(jsonResponse).toEqual(arrayContaining([
-                  { id: 'appA' },
-                  { id: 'appB' },
-                  { id: 'appZ' }
+                  { id: 'appA', name: 'appA' },
+                  { id: 'appB', name: 'appB' },
+                  { id: 'appZ', name: 'appZ' }
                 ]))
               })
     })
@@ -132,7 +104,6 @@ describe('Rest', () => {
       await request(server())
               .post('/take')
               .send({user: 'john', app: 'appA'})
-              .set('Authorization', validAuth)
               .set('Content-Type', 'application/json')
               .expect(403)
               .expect({ text: 'App is already taken' })
@@ -142,7 +113,6 @@ describe('Rest', () => {
       await request(server())
               .post('/return')
               .send({user: 'john', app: 'appA'})
-              .set('Authorization', validAuth)
               .set('Content-Type', 'application/json')
               .expect(403, { text: 'App is not taken' })
     })
@@ -153,16 +123,14 @@ describe('Rest', () => {
       await request(server())
               .post('/return')
               .send({user: 'john', app: 'appA'})
-              .set('Authorization', validAuth)
               .set('Content-Type', 'application/json')
               .expect(403, { text: 'Taken by billy, not you' })
     })
 
-    it.only('to add an existing app', async () => {
+    it('to add an existing app', async () => {
       await request(server())
               .put('/add')
               .send({name: 'appA'})
-              .set('Authorization', validAuth)
               .set('Accept', 'application/json')
               .expect(403)
               .expect({ text: 'App already exists' })
