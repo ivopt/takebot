@@ -7,7 +7,7 @@ describe('WebApp', () => {
 
   it('responds with a 200 OK when running', (done) => {
     request(app)
-      .get('/')
+      .get('/status')
       .expect(200)
     .end(done)
   })

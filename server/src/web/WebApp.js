@@ -3,7 +3,7 @@ import SlackRoutes from './Slack'
 import RestRoutes from './Rest'
 
 export default (Context, config, router = new Router()) => {
-  router.get('/', (_req, res) => {
+  router.get('/status', (_req, res) => {
     res.status(200)
        .send("OK")
   })
