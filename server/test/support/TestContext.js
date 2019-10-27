@@ -2,7 +2,7 @@ import { Locator } from '#/src/util/Locator'
 import PromiseRedis from '#/src/redis/PromiseRedis'
 import AppsRepo from '#/src/redis/apps/AppsRepo'
 import RemindersRepo from '#/src/memory/reminders/RemindersRepo'
-import ITakeNotifier from '#/src/core/ITakeNotifier'
+import ITakeNotifier from '#/src/core/notifications/ITakeNotifier'
 import Messages from '#/src/messages'
 
 import TakeApp from '#/src/core/apps/features/TakeApp'

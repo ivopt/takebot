@@ -36,23 +36,6 @@ describe('ReturnApp', () => {
     expect(noholder).toBeNull()
   })
 
-  it('removes existing reminders for the taken app', async () => {
-    const existingReminderId = await Context.remindersRepo.find(takenApp)
-    expect(existingReminderId).toEqual(expectedReminderId)
-
-    await returnApp(takenApp, expectedUser)
-
-    const noReminderId = await Context.remindersRepo.find(takenApp)
-    expect(noReminderId).toBeUndefined()
-  })
-
-  it('notifies the team about app being returned', async () => {
-    await returnApp("appA", "ivo")
-    const notifications = Context.notifier.teamNotifications
-    expect(notifications.length).toEqual(1)
-    expect(notifications[0].message).toMatch("ivo has returned `appA`")
-  })
-
   it('fails if the app does not exist', async () => {
     try {
       await returnApp('appZ', expectedUser)

@@ -1,10 +1,8 @@
-import SetReminder from '#/src/core/apps/UseCases/SetReminder'
-import ITakeNotifier from '#/src/core/ITakeNotifier'
+import SetReminder from '#/src/core/reminders/features/SetReminder'
 import IRemindersRepo from '#/src/core/reminders/IRemindersRepo'
 
-class MockedNotifier extends ITakeNotifier {
+class MockedNotifier {
   constructor(notifyUserMock) {
-    super()
     this.notifyUser = notifyUserMock
   }
 }

@@ -23,19 +23,6 @@ describe('TakeApp', () => {
     expect(holder).toEqual("ivo")
   })
 
-  it('sets up a reminder', async () => {
-    await takeApp("appA", "ivo")
-    const reminderId = await Context.remindersRepo.find("appA")
-    expect(reminderId).toBeDefined()
-  })
-
-  it('notifies about the app being taken', async () => {
-    await takeApp("appA", "ivo")
-    const notifications = Context.notifier.teamNotifications
-    expect(notifications.length).toEqual(1)
-    expect(notifications[0].message).toMatch("ivo has taken `appA`")
-  })
-
   it('when an app does not exist, fails and warns the app does not exist', async () => {
     try {
       await takeApp('appZ', 'ivo')
