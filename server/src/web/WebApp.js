@@ -9,7 +9,7 @@ export default (Context, config, router = new Router()) => {
   })
 
   router.use('/slack', SlackRoutes(Context, config))
-  router.use(RestRoutes(Context, config))
+  router.use('/api', RestRoutes(Context, config))
 
   return router
 }
