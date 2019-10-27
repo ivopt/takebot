@@ -1,8 +1,8 @@
-sync:
-	@docker-sync start
+start-sync:
+	@DOCKER_SYNC_SKIP_UPGRADE=true DOCKER_SYNC_SKIP_UPDATE=true DOCKER_SYNC_SKIP_DEPENDENCIES_CHECK=true docker-sync start
 
 stop-sync:
-	@docker-sync stop
+	@DOCKER_SYNC_SKIP_UPGRADE=true DOCKER_SYNC_SKIP_UPDATE=true DOCKER_SYNC_SKIP_DEPENDENCIES_CHECK=true docker-sync stop
 
 shell:
 	@docker-compose run -p 3000:3000 -p 1234:1234 -p 2345:2345 takebot bash
@@ -19,8 +19,8 @@ down:
 redis:
 	@redis-cli -u redis://127.0.0.1:16379
 
-start: sync shell
+start: start-sync shell
 stop: stop-sync down
 
-fe-start: sync fe-shell
-be-start: sync be-shell
+fe-start: start-sync fe-shell
+be-start: start-sync be-shell
