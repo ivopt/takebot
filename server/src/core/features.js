@@ -15,9 +15,9 @@ const takeApp = (
   remindIn,
 ) => ({app, user}) =>
   Promise.resolve({app, user})
-   .then(TakeApp(appsRepo))
-   .then(SetReminder(remindIn, remindersRepo, notifier))
-   .then(NotifyTeam(notifier, messages.userHasTakenApp))
+         .then(TakeApp(appsRepo))
+         .then(SetReminder(remindIn, remindersRepo, notifier))
+         .then(NotifyTeam(notifier, messages.userHasTakenApp))
 
 const returnApp = (
   appsRepo,
@@ -25,9 +25,10 @@ const returnApp = (
   notifier,
   messages
 ) => ({app, user}) =>
-  ReturnApp(appsRepo)({app, user})
-   .then(CancelReminder(remindersRepo))
-   .then(NotifyTeam(notifier, messages.userHasReturnedApp))
+  Promise.resolve({app, user})
+         .then(ReturnApp(appsRepo))
+         .then(CancelReminder(remindersRepo))
+         .then(NotifyTeam(notifier, messages.userHasReturnedApp))
 
 export default {
   ListApps,

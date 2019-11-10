@@ -5,9 +5,11 @@ export const effect = (async_fn) => async (ctx) => {
   return ctx
 }
 
-export const check = (list) => (context) => {
+const throwIfContextDoesNotContain = (list) => (context) => {
   const diff = array.difference(list, Object.keys(context))
   if (diff.length > 0)
     throw `Missing context: ${diff.join(', ')}`
-  return context
 }
+
+export const check = (list) =>
+  effect(throwIfContextDoesNotContain(list))
