@@ -6,7 +6,7 @@ export default (
   const holder = await appsRepo.holder(ctx.app)
 
   if (!holder)
-    throw new AppIsNotTaken("App is not taken")
+    throw new AppIsNotTaken('App is not taken')
   if (holder !== ctx.user)
     throw new AppIsTakenByOtherUser(`Taken by ${holder}, not you`)
 

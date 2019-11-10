@@ -36,7 +36,7 @@ describe('Rest', () => {
     })
 
     it('allows a user to return an app he has taken', async () => {
-      await Context.takeApp('appA', 'john')
+      await Context.takeApp({app: 'appA', user: 'john'})
 
       await request(server())
               .post('/return')
@@ -46,7 +46,7 @@ describe('Rest', () => {
     })
 
     it('allows a user to get a status of all apps', async () => {
-      await Context.takeApp('appA', 'jack')
+      await Context.takeApp({app: 'appA', user: 'jack'})
 
       await request(server())
               .get('/status')
@@ -99,7 +99,7 @@ describe('Rest', () => {
 
   describe('Refuses', () => {
     it('refuses to take a taken app', async () => {
-      await Context.takeApp('appA', 'somedude')
+      await Context.takeApp({ app: 'appA', user: 'somedude' })
 
       await request(server())
               .post('/take')
@@ -118,7 +118,7 @@ describe('Rest', () => {
     })
 
     it('refuses to return an app that was not taken by the user', async () => {
-      await Context.takeApp('appA', 'billy')
+      await Context.takeApp({ app: 'appA', user: 'billy' })
 
       await request(server())
               .post('/return')

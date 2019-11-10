@@ -13,8 +13,9 @@ const takeApp = (
   notifier,
   messages,
   remindIn,
-) => (app, user) =>
-  TakeApp(appsRepo)(app, user)
+) => ({app, user}) =>
+  Promise.resolve({app, user})
+   .then(TakeApp(appsRepo))
    .then(SetReminder(remindIn, remindersRepo, notifier))
    .then(NotifyTeam(notifier, messages.userHasTakenApp))
 
@@ -23,8 +24,8 @@ const returnApp = (
   remindersRepo,
   notifier,
   messages
-) => (app, user) =>
-  ReturnApp(appsRepo)(app, user)
+) => ({app, user}) =>
+  ReturnApp(appsRepo)({app, user})
    .then(CancelReminder(remindersRepo))
    .then(NotifyTeam(notifier, messages.userHasReturnedApp))
 

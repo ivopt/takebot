@@ -4,7 +4,7 @@ import { effect } from '../../../util/Railway'
 
 const ReturnApp = (
   appsRepo,
-) => (app, user) =>
+) => ({app, user}) =>
   Promise.resolve({app, user})
          .then(CheckIfAppExists(appsRepo))
          .then(CheckIfAppIsTaken(appsRepo))
