@@ -8,5 +8,5 @@ export default (
   if (!holder)
     return ctx
   else
-    throw new AppIsTaken("App is already taken")
+    throw new AppIsTaken('App is already taken')
 }

@@ -2,14 +2,9 @@ import { Locator } from '#/src/util/Locator'
 import PromiseRedis from '#/src/redis/PromiseRedis'
 import AppsRepo from '#/src/redis/apps/AppsRepo'
 import RemindersRepo from '#/src/memory/reminders/RemindersRepo'
-import ITakeNotifier from '#/src/core/ITakeNotifier'
+import ITakeNotifier from '#/src/core/notifications/ITakeNotifier'
 import Messages from '#/src/messages'
-
-import TakeApp from '#/src/core/apps/features/TakeApp'
-import ReturnApp from '#/src/core/apps/features/ReturnApp'
-import ShowStatus from '#/src/core/apps/features/ShowStatus'
-import ListApps from '#/src/core/apps/features/ListApps'
-import AddApp from '#/src/core/apps/features/AddApp'
+import Features from '#/src/core/features'
 
 // TODO: This is to be used on integration test. We don't wanna hit slack, but we
 //       might wanna hit some faked API of some sort - stubby4node?
@@ -36,11 +31,11 @@ locator.singleton(PromiseRedis.createClient({url: process.env['REDIS_URL']}), {n
        .singleton(new AppsRepo(locator.redisClient, process.env['ROOT_KEY']))
        .singleton(new RemindersRepo())
        .singleton(new MockedNotifier(), {name: 'notifier'})
-       .fnFactory(TakeApp, { args: { remindIn: 1000 } })
-       .fnFactory(ReturnApp, { name: 'returnApp' })
-       .fnFactory(ShowStatus)
-       .fnFactory(ListApps)
-       .fnFactory(AddApp)
+       .fnFactory(Features.TakeApp, { args: { remindIn: 1000 } })
+       .fnFactory(Features.ReturnApp, { name: 'returnApp' })
+       .fnFactory(Features.ShowStatus)
+       .fnFactory(Features.ListApps)
+       .fnFactory(Features.AddApp)
        .onExit(() => {
          locator.redisClient.quit()
        })

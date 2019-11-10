@@ -9,7 +9,7 @@ describe('ShowStatus', () => {
   beforeEach(async () => {
     await Context.reset()
     await Context.appsRepo.add({name: "appA"}, {name: "appB"})
-    await Context.takeApp("appA", "jack")
+    await Context.takeApp({ app: "appA", user: "jack" })
 
     showStatus = Context.buildFn(ShowStatus)
   })
