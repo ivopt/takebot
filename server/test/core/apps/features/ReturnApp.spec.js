@@ -8,13 +8,13 @@ import {
 
 describe('ReturnApp', () => {
   let returnApp = null
-  const takenApp = "appA"
-  const expectedUser = "ivo"
+  const takenApp = 'appA'
+  const expectedUser = 'ivo'
   const expectedReminderId = 1234
 
   beforeEach(async () => {
     await Context.reset()
-    await Context.appsRepo.add({name: "appA"}, {name: "appB"})
+    await Context.appsRepo.add({name: 'appA'}, {name: 'appB'})
 
     returnApp = Context.buildFn(ReturnApp)
 
@@ -31,31 +31,14 @@ describe('ReturnApp', () => {
     const holder = await Context.appsRepo.holder(takenApp)
     expect(holder).toEqual(expectedUser)
 
-    await returnApp(takenApp, expectedUser)
+    await returnApp({app: takenApp, user: expectedUser})
     const noholder = await Context.appsRepo.holder(takenApp)
     expect(noholder).toBeNull()
   })
 
-  it('removes existing reminders for the taken app', async () => {
-    const existingReminderId = await Context.remindersRepo.find(takenApp)
-    expect(existingReminderId).toEqual(expectedReminderId)
-
-    await returnApp(takenApp, expectedUser)
-
-    const noReminderId = await Context.remindersRepo.find(takenApp)
-    expect(noReminderId).toBeUndefined()
-  })
-
-  it('notifies the team about app being returned', async () => {
-    await returnApp("appA", "ivo")
-    const notifications = Context.notifier.teamNotifications
-    expect(notifications.length).toEqual(1)
-    expect(notifications[0].message).toMatch("ivo has returned `appA`")
-  })
-
   it('fails if the app does not exist', async () => {
     try {
-      await returnApp('appZ', expectedUser)
+      await returnApp({app: 'appZ', user: expectedUser})
       fail('Expected to fail')
     } catch(error) {
       expect(error).toBeInstanceOf(AppDoesNotExist)
@@ -64,7 +47,7 @@ describe('ReturnApp', () => {
 
   it('fails if the app is not taken', async () => {
     try {
-      await returnApp('appB', expectedUser)
+      await returnApp({app: 'appB', user: expectedUser})
       fail('Expected to fail')
     } catch(error) {
       expect(error).toBeInstanceOf(AppIsNotTaken)
@@ -73,7 +56,7 @@ describe('ReturnApp', () => {
 
   it('fails if the app is taken by a different user', async () => {
     try {
-      await returnApp(takenApp, 'marco')
+      await returnApp({app: takenApp, user: 'marco'})
       fail('Expected to fail')
     } catch(error) {
       expect(error).toBeInstanceOf(AppIsTakenByOtherUser)

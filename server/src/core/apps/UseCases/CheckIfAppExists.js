@@ -6,5 +6,5 @@ export default (
   if (await appsRepo.exist(ctx.app))
     return ctx
   else
-    throw new AppDoesNotExist("App does not exist")
+    throw new AppDoesNotExist('App does not exist')
 }

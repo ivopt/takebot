@@ -1,9 +1,9 @@
-import { effect } from "../../../util/Railway";
-import { AppAlreadyExists } from "../Errors";
+import { effect } from '../../../util/Railway';
+import { AppAlreadyExists } from '../Errors';
 
 const AddApp = (
   appsRepo,
-) => (app) =>
+) => ({app}) =>
   Promise.resolve({app})
          .then(failIfAppAlreadyExists(appsRepo))
          .then(effect(({app}) => appsRepo.add(app)))
@@ -15,6 +15,6 @@ export default AddApp
 
 const failIfAppAlreadyExists = (appsRepo) => async (ctx) => {
   if (await appsRepo.exist(ctx.app.name))
-    throw new AppAlreadyExists("App already exists")
+    throw new AppAlreadyExists('App already exists')
   return ctx
 }

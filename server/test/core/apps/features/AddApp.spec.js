@@ -19,7 +19,7 @@ describe('AddApp', () => {
   })
 
   it('adds an app to the app list', async () => {
-    await addApp({name: 'appA'})
+    await addApp({app: {name: 'appA'}})
     const apps = await Context.appsRepo.list()
 
     expect(apps).toEqual(arrayContaining([
@@ -31,7 +31,7 @@ describe('AddApp', () => {
     await Context.appsRepo.add({ name: 'appA' })
 
     try {
-      await addApp({name: 'appA'})
+      await addApp({app: {name: 'appA'}})
       fail('Expected to fail')
     } catch(error) {
       expect(error).toBeInstanceOf(AppAlreadyExists)

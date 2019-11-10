@@ -1,5 +1,5 @@
 import SlackBot from 'slackbots'
-import ITakeNotifier from "../core/ITakeNotifier"
+import ITakeNotifier from "../core/notifications/ITakeNotifier"
 
 export default class SlackBotNotifier extends ITakeNotifier {
   constructor() {
