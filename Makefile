@@ -11,7 +11,7 @@ fe-shell:
 	@docker-compose run -p 1234:1234 -p 2345:2345 takebot bash
 
 be-shell:
-	@docker-compose run -p 3000:3000 takebot bash
+	@docker-compose run -p 3000:3000 -p 9229:9229 takebot bash
 
 down:
 	@docker-compose down
