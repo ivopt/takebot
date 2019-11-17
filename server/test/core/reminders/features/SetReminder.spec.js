@@ -8,8 +8,8 @@ class MockedNotifier {
 }
 
 class MockedRemindersRepo extends IRemindersRepo {
-  add = (_app, id) => { this.remindId = id; return Promise.resolve() }
-  find = (_app) => { return Promise.resolve(this.remindId) }
+  add = (_app, { interval }) => { this.remindId = interval; return Promise.resolve() }
+  find = (_app) => Promise.resolve(this.remindId)
 }
 
 describe('SetReminder', () => {
@@ -29,9 +29,10 @@ describe('SetReminder', () => {
   })
 
   it('sets a reminderId on the context', async () => {
-    const { reminderId } = await setReminder({user: 'theuser', app: 'theapp'})
-    const storedReminderId = await mockedRemindersRepo.find('theapp')
-    expect(reminderId).toEqual(storedReminderId)
+    const { interval } = await setReminder({user: 'theuser', app: 'theapp'})
+    const storedInterval = await mockedRemindersRepo.find('theapp')
+
+    expect(interval).toEqual(storedInterval)
   })
 
   // Not sure how to deal with this without introducing "stuff" to production code..

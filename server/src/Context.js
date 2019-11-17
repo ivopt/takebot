@@ -6,11 +6,7 @@ import Messages from './messages'
 import SlackbotNotifier from './slackbot/SlackbotNotifier'
 // import TakeNotifier from './memory/TakeNotifier'
 
-import TakeApp from './core/apps/features/TakeApp'
-import ReturnApp from './core/apps/features/ReturnApp'
-import ShowStatus from './core/apps/features/ShowStatus'
-import ListApps from './core/apps/features/ListApps'
-import AddApp from './core/apps/features/AddApp'
+import Features from './core/features'
 
 const locator = Locator()
 locator.singleton(PromiseRedis.createClient({url: process.env['REDIS_URL']}), {name: 'redisClient'})
@@ -20,11 +16,11 @@ locator.singleton(PromiseRedis.createClient({url: process.env['REDIS_URL']}), {n
       //  .singleton(new TakeNotifier(), { name: 'notifier' })
        .singleton(new AppsRepo(locator.redisClient, process.env['ROOT_KEY']))
        .singleton(new RemindersRepo())
-       .fnFactory(TakeApp, { args: { remindIn: 1000 } })
-       .fnFactory(ReturnApp, { name: 'returnApp' })
-       .fnFactory(ShowStatus)
-       .fnFactory(ListApps)
-       .fnFactory(AddApp)
+       .fnFactory(Features.TakeApp, { args: { remindIn: 4000 } })
+       .fnFactory(Features.ReturnApp, { name: 'returnApp' })
+       .fnFactory(Features.ShowStatus)
+       .fnFactory(Features.ListApps)
+       .fnFactory(Features.AddApp)
        .onExit(() => {
          locator.redisClient.quit()
        })

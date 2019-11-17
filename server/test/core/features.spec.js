@@ -155,7 +155,7 @@ describe('features', () => {
       returnApp = Context.buildFn(features.ReturnApp)
 
       await Context.appsRepo.take(takenApp, expectedUser)
-      await Context.remindersRepo.add(takenApp, expectedReminderId)
+      await Context.remindersRepo.add(takenApp, { interval: expectedReminderId })
     })
 
     it('allows a user to return a taken app', async () => {

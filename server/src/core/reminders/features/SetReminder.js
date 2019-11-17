@@ -3,11 +3,13 @@ export default (
   remindersRepo,
   notifier,
 ) => async (ctx) => {
-  const sendNotification = () =>
-    notifier.notifyUser(ctx.user, `Are you done with \`${ctx.app}\` ?`)
+  const user = ctx.user
+  const message = `Are you done with \`${ctx.app}\` ?`
 
-  const reminderId = setTimeout(sendNotification, remindIn)
-  await remindersRepo.add(ctx.app, reminderId)
+  const interval =
+    setInterval(() => notifier.notifyUser(user, message), remindIn)
 
-  return { ...ctx, reminderId }
+  await remindersRepo.add(ctx.app, {user, message, interval})
+
+  return { ...ctx, interval }
 }

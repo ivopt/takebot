@@ -14,8 +14,8 @@ export default class Command {
 
   invalidCommand = (_) => Promise.reject({message: "Invalid command"})
 
-  run_take   = (Context) => Context.takeApp(this.app, this.user)
-  run_return = (Context) => Context.returnApp(this.app, this.user)
+  run_take   = (Context) => Context.takeApp({app: this.app, user: this.user})
+  run_return = (Context) => Context.returnApp({app: this.app, user: this.user})
   run_status = (Context) => Context.showStatus()
 
   run_list   = (_Context) => Promise.reject({message: "list is not yet implemented"})

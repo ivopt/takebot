@@ -22,15 +22,15 @@ describe('RemindersRepo', () => {
 
   describe('#add', () => {
     it('adds a new reminder', async () => {
-      await remindersRepo.add("appA", jest.fn())
+      await remindersRepo.add("appA", { interval: 123 })
       expect(Object.keys(await remindersRepo.all())).toContain("appA")
     })
 
     it('refuses to add an already existing reminder', async () => {
-      await remindersRepo.add("appA", jest.fn())
+      await remindersRepo.add("appA", { interval: 123 })
 
       try {
-        await remindersRepo.add("appA", jest.fn())
+        await remindersRepo.add("appA", { interval: 1234 })
         fail("Expecting to throw and it didn't")
       } catch(error) {
         expect(error).toEqual('Reminder is already set')
@@ -40,8 +40,8 @@ describe('RemindersRepo', () => {
 
   describe('#find', () => {
     it('finds the details for a reminder', async () => {
-      await remindersRepo.add("appA", "some details")
-      expect(await remindersRepo.find("appA")).toEqual("some details")
+      await remindersRepo.add("appA", { interval: 123 })
+      expect(await remindersRepo.find("appA")).toEqual(123)
     })
 
     it('when the app does not exist, returns undefined', async () => {
@@ -52,7 +52,7 @@ describe('RemindersRepo', () => {
   describe('#remove', () => {
     it('removes a reminder', async () => {
       const timeout = setTimeout(()=>{}, 200)
-      await remindersRepo.add("appA", timeout)
+      await remindersRepo.add("appA", { interval: timeout })
       expect(await remindersRepo.find("appA")).toEqual(timeout)
 
       await remindersRepo.remove("appA")

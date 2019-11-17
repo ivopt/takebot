@@ -10,10 +10,10 @@ export default class RemindersRepo extends IRemindersRepo {
 
   find = (app) => Promise.resolve(this.reminders[app])
 
-  add = (app, timeout) => {
+  add = (app, { interval }) => {
     if (this.reminders[app])
       return Promise.reject("Reminder is already set")
-    return Promise.resolve(this.reminders[app] = timeout)
+    return Promise.resolve(this.reminders[app] = interval)
   }
 
   remove = (app) => {
