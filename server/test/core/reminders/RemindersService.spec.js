@@ -2,19 +2,7 @@ import RemindersService from '#/src/core/reminders/RemindersService'
 import IRemindersRepo from '#/src/core/reminders/IRemindersRepo'
 import ITakeNotifier from '#/src/core/notifications/ITakeNotifier'
 
-const arrayContaining = expect.arrayContaining
-
-const mockInterfaceImpl = (iface) =>
-  Object.getOwnPropertyNames(new iface())
-        .reduce((acc, method) => Object.assign(acc, {[method]: jest.fn()}), {})
-
-const memoize = (fn) => {
-  let memo
-  return () => memo || (memo = fn())
-}
-
-const memoizedMockImpl = (iface) =>
-  memoize(() => mockInterfaceImpl(iface))
+import { memoizeFn, memoizedMockImpl } from '#/test/support/MockInterfaces'
 
 describe('RemindersService', () => {
   const RemindersRepo = memoizedMockImpl(IRemindersRepo)
@@ -62,7 +50,7 @@ describe('RemindersService', () => {
       { app: 'appA', user: 'user 1', message: 'message 1' },
       { app: 'appB', user: 'user 2', message: 'message 2' }
     ]
-    const RemindersRepo = memoize(() => ({all: () => Promise.resolve(reminders)}))
+    const RemindersRepo = memoizeFn(() => ({all: () => Promise.resolve(reminders)}))
 
     it('just delegates to the repo', async () => {
       const remindersService = Subject(RemindersRepo())
@@ -75,7 +63,7 @@ describe('RemindersService', () => {
   describe('#find', () => {
     const reminder = { app: 'appB', user: 'user 2', message: 'message 2' }
     
-    const RemindersRepo = memoize(() => ({
+    const RemindersRepo = memoizeFn(() => ({
       find: (name) =>
         name === 'appB' ? Promise.resolve(reminder) : Promise.reject()
     }))
@@ -95,7 +83,7 @@ describe('RemindersService', () => {
       { app: 'appA', user: 'user 1', message: 'message 1' },
       { app: 'appB', user: 'user 2', message: 'message 2' }
     ]
-    const RemindersRepo = memoize(() => ({all: () => Promise.resolve(reminders)}))
+    const RemindersRepo = memoizeFn(() => ({all: () => Promise.resolve(reminders)}))
 
     it('recovers reminders persisted on the DB', async () => {
       const remindersService = Subject(RemindersRepo())
