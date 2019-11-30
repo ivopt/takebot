@@ -18,6 +18,9 @@ export default class RemindersService {
     clearInterval(this.intervals[app])
   }
 
+  all = async () => await this.remindersRepo.all()
+  find = async (name) => await this.remindersRepo.find(name)
+
   reinstateStoredReminders = async () => {
     const list = await this.remindersRepo.all()
 
