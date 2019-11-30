@@ -5,21 +5,25 @@ export default class RemindersRepo extends IRemindersRepo {
   constructor(redisClient, rootKey) {
     super()
     this.redisClient = redisClient
-    this.reminders = `${rootKey}:reminder`
+    this.remindersKey = `${rootKey}:reminder`
   }
 
-  all = () => this.redisClient.hgetall(this.reminders)
+  all = () => this.redisClient.hgetall(this.remindersKey)
                               .then(coalesce({}))
-                              .then(transformValues(Number))
+                              .then(transformValues(JSON.parse))
 
-  find = (app) => this.redisClient.hget(this.reminders, app)
+  find = (app) => this.redisClient.hget(this.remindersKey, app)
                                   .then(coalesce(undefined))
-                                  .then(transformOne(Number))
+                                  .then(transformOne(JSON.parse))
 
-  add = (app, timerId) =>
+  add = (app, {user, message}) =>
     this.find(app)
         .then((val) => { if (val) throw 'Reminder is already set' })
-        .then(() => this.redisClient.hset(this.reminders, app, timerId))
+        .then(() => {
+          const reminder = {app, user, message}
+          this.redisClient.hset(this.remindersKey, app, JSON.stringify(reminder))
+          return reminder
+        })
 
-  remove = (app) => this.redisClient.hdel(this.reminders, app)
+  remove = (app) => this.redisClient.hdel(this.remindersKey, app)
 }

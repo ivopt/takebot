@@ -11,7 +11,8 @@
     "dev": "nodemon -w src/ --exec babel-node src/index.js",
     "takebot": "yarn build && bin/takebot",
     "test": "jest --runInBand",
-    "test:debug": "babel-node --inspect-brk=0.0.0.0 node_modules/.bin/jest --runInBand --no-cache"
+    "test:debug": "babel-node --inspect-brk=0.0.0.0 node_modules/.bin/jest --runInBand --no-cache",
+    "test:debug:cli": "babel-node debug node_modules/.bin/jest --runInBand --no-cache"
   },
   "author": "LynxEyes",
   "license": "MIT",
