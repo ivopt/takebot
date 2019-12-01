@@ -41,8 +41,8 @@ const respondToSlack = (command, ctx) => {
       return null // `You have returned ${ctx.app}`
 
     case 'status':
-      return Object.entries(ctx.status)
-                   .map(([app, status]) => `• \`${app}\` - ${status}`)
-                   .join("\n")
+      return ctx.status
+                .map(({id, message}) => `• \`${id}\` - ${message}`)
+                .join("\n")
   }
 }

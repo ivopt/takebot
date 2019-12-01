@@ -9,25 +9,24 @@ import NotifyTeam from './notifications/features/NotifyTeam'
 
 const takeApp = (
   appsRepo,
-  remindersRepo,
+  remindersService,
   notifier,
-  messages,
-  remindIn,
+  messages
 ) => ({app, user}) =>
   Promise.resolve({app, user})
          .then(TakeApp(appsRepo))
-         .then(SetReminder(remindIn, remindersRepo, notifier))
+         .then(SetReminder(remindersService, messages))
          .then(NotifyTeam(notifier, messages.userHasTakenApp))
 
 const returnApp = (
   appsRepo,
-  remindersRepo,
+  remindersService,
   notifier,
   messages
 ) => ({app, user}) =>
   Promise.resolve({app, user})
          .then(ReturnApp(appsRepo))
-         .then(CancelReminder(remindersRepo))
+         .then(CancelReminder(remindersService))
          .then(NotifyTeam(notifier, messages.userHasReturnedApp))
 
 export default {
