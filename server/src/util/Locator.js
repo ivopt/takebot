@@ -8,11 +8,21 @@ export const Locator = () => {
     return true
   }
 
+  const memoize = (fn) => {
+    let memo
+    return () => memo || (memo = fn())
+  }
+
   const instantiantize = (name) => name.replace(/^./, (char) => char.toLowerCase())
   const chain = (fn) => (...args) => { fn(...args); return self }
 
   const getArgs = (args, grounded) => args.map(arg => grounded[arg] || self[arg])
-  const fnFactory = (fn, groundedArgs) => () => fn(...getArgs(fnArgs(fn), groundedArgs))
+
+  const fnFactory = (fn, groundedArgs) => () =>
+    fn(...getArgs(fnArgs(fn), groundedArgs))
+
+  const classFactory = (constructor, groundedArgs) => () =>
+    new constructor(...getArgs(fnArgs(constructor), groundedArgs))
 
   const register = (name, factory) => {
     if (valid(name))
@@ -23,11 +33,17 @@ export const Locator = () => {
   const serviceName = (name, service) => name || instantiantize(service.constructor.name)
 
   const self = {
-    fnFactory: chain((fn, {args = {}, name} = {}) =>
-      register(fnName(name, fn), fnFactory(fn, args))),
+    fnSingleton: chain((service, {name} = {}) =>
+      register(serviceName(name, service), memoize(service))),
 
     singleton: chain((service, {name} = {}) =>
       register(serviceName(name, service), () => service)),
+
+    fnFactory: chain((fn, {args = {}, name} = {}) =>
+      register(fnName(name, fn), fnFactory(fn, args))),
+
+    factory: chain((constructor, { args = {}, name } = {}) =>
+      register(fnName(name, constructor), classFactory(constructor, args))),
 
     lazySingleton: chain(() => {}),
     // classFactory: chain((name, fn, injectedArgs = [], groundedArgs = {}) =>
