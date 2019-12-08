@@ -16,6 +16,11 @@ describe('features', () => {
     Context.exit()
   })
 
+  beforeEach(() => {
+    jest.useFakeTimers()
+    jest.clearAllTimers()
+  })
+
   describe('ListApps', () => {
     let listApps = null
 
@@ -111,8 +116,13 @@ describe('features', () => {
 
     it('sets up a reminder', async () => {
       await takeApp({app: 'appA', user: 'ivo' })
-      const reminderId = await Context.remindersRepo.find('appA')
-      expect(reminderId).toBeDefined()
+      const expectedMessage = Context.messages.areYouDoneWith('appA')
+      const reminder = await Context.remindersRepo.find('appA')
+
+      jest.runOnlyPendingTimers()
+
+      expect(reminder).toMatchObject({app: 'appA', user: 'ivo', message: Context.messages.areYouDoneWith('appA')})
+      expect(Context.notifier.userNotifications).toContainEqual({user: 'ivo', message: expectedMessage})
     })
 
     it('notifies about the app being taken', async () => {
@@ -146,7 +156,6 @@ describe('features', () => {
     let returnApp = null
     const takenApp = 'appA'
     const expectedUser = 'ivo'
-    const expectedReminderId = 1234
 
     beforeEach(async () => {
       await Context.reset()
@@ -155,7 +164,11 @@ describe('features', () => {
       returnApp = Context.buildFn(features.ReturnApp)
 
       await Context.appsRepo.take(takenApp, expectedUser)
-      await Context.remindersRepo.add(takenApp, { interval: expectedReminderId })
+      await Context.remindersService.add({
+        app: takenApp,
+        user: expectedUser,
+        message: 'some random message'
+      })
     })
 
     it('allows a user to return a taken app', async () => {
@@ -168,13 +181,9 @@ describe('features', () => {
     })
 
     it('removes existing reminders for the taken app', async () => {
-      const existingReminderId = await Context.remindersRepo.find(takenApp)
-      expect(existingReminderId).toEqual(expectedReminderId)
-
       await returnApp({app: takenApp, user: expectedUser})
 
-      const noReminderId = await Context.remindersRepo.find(takenApp)
-      expect(noReminderId).toBeUndefined()
+      expect(await Context.remindersRepo.find(takenApp)).toBeUndefined()
     })
 
     it('notifies the team about app being returned', async () => {

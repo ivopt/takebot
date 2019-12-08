@@ -10,14 +10,13 @@ export default class RemindersRepo extends IRemindersRepo {
 
   find = (app) => Promise.resolve(this.reminders[app])
 
-  add = (app, { interval }) => {
+  add = (app, { user, message }) => {
     if (this.reminders[app])
       return Promise.reject("Reminder is already set")
-    return Promise.resolve(this.reminders[app] = interval)
+    return Promise.resolve(this.reminders[app] = {app, user, message})
   }
 
   remove = (app) => {
-    clearTimeout(this.reminders[app])
     Promise.resolve(delete this.reminders[app])
   }
 
