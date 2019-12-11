@@ -95,6 +95,25 @@ describe('Rest', () => {
                 ]))
               })
     })
+
+    it('allows a user to delete an existing app', async () => {
+      await request(server())
+              .put('/remove')
+              .send({name: 'appA'})
+              .set('Accept', 'application/json')
+              .expect(200)
+
+      await request(server())
+              .get('/list')
+              .set('Accept', 'application/json')
+              .expect(200)
+              .then((response) => JSON.parse(response.text))
+              .then(jsonResponse => {
+                expect(jsonResponse).toEqual([
+                  { id: 'appB', name: 'appB' }
+                ])
+              })
+    })
   })
 
   describe('Refuses', () => {
@@ -134,6 +153,15 @@ describe('Rest', () => {
               .set('Accept', 'application/json')
               .expect(403)
               .expect({ text: 'App already exists' })
+    })
+
+    it.skip('to remove a non-existing app', async () => {
+      await request(server())
+              .put('/remove')
+              .send({name: 'appZ'})
+              .set('Accept', 'application/json')
+              .expect(403)
+              .expect({ text: 'App does not exist' })
     })
   })
 })

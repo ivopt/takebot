@@ -39,6 +39,7 @@ locator.singleton(PromiseRedis.createClient({url: process.env['REDIS_URL']}), {n
        .fnFactory(Features.ShowStatus)
        .fnFactory(Features.ListApps)
        .fnFactory(Features.AddApp)
+       .fnFactory(Features.RemoveApp)
        .onExit(() => {
          locator.redisClient.quit()
        })

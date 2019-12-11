@@ -29,10 +29,16 @@ const returnApp = (
          .then(CancelReminder(remindersService))
          .then(NotifyTeam(notifier, messages.userHasReturnedApp))
 
+const removeApp = (
+  // TODO: This!!
+) => ({app}) =>
+  Promise.resolve({app})
+
 export default {
   ListApps,
   AddApp,
   ShowStatus,
+  RemoveApp: removeApp,
   TakeApp: takeApp,
   ReturnApp: returnApp
 }
