@@ -70,6 +70,10 @@ describe('features', () => {
     })
   })
 
+  describe('RemoveApp', () => {
+    // TODO: This
+  })
+
   describe('ShowStatus', () => {
     let showStatus
 

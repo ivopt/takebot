@@ -96,7 +96,7 @@ describe('Rest', () => {
               })
     })
 
-    it('allows a user to delete an existing app', async () => {
+    it.only('allows a user to delete an existing app', async () => {
       await request(server())
               .put('/remove')
               .send({name: 'appA'})
