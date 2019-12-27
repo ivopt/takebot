@@ -90,7 +90,7 @@ describe('Rest', () => {
 
     it('allows a user to delete an existing app', async () => {
       await request(server())
-              .put('/remove')
+              .post('/remove')
               .send({name: 'appA'})
               .set('Accept', 'application/json')
               .expect(200)
@@ -149,7 +149,7 @@ describe('Rest', () => {
 
     it('to remove a non-existing app', async () => {
       await request(server())
-              .put('/remove')
+              .post('/remove')
               .send({name: 'appZ'})
               .set('Accept', 'application/json')
               .expect(403)

@@ -29,7 +29,7 @@ export default (Context, _config = {}, router = new Router()) => {
            .catch((error) => res.status(403).json(userResponse(error.message)))
   })
 
-  router.put('/remove', (req, res) => {
+  router.post('/remove', (req, res) => {
     const app = req.body
 
     Context.removeApp({app: app.name})
