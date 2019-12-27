@@ -8,14 +8,6 @@ const arrayContaining = expect.arrayContaining
 describe('Rest', () => {
   const server = () => TestExpressApp().use(Rest(Context))
 
-  const helpers = {
-    takeApp: async (serverApp, user, appName) => {
-      await request(serverApp)
-              .post('/take')
-              .send({user, app: appName})
-    }
-  }
-
   beforeEach(async () => {
     await Context.reset()
     await Context.appsRepo.add({name: 'appA'}, {name: 'appB'})
@@ -96,7 +88,7 @@ describe('Rest', () => {
               })
     })
 
-    it.only('allows a user to delete an existing app', async () => {
+    it('allows a user to delete an existing app', async () => {
       await request(server())
               .put('/remove')
               .send({name: 'appA'})
@@ -155,7 +147,7 @@ describe('Rest', () => {
               .expect({ text: 'App already exists' })
     })
 
-    it.skip('to remove a non-existing app', async () => {
+    it('to remove a non-existing app', async () => {
       await request(server())
               .put('/remove')
               .send({name: 'appZ'})
