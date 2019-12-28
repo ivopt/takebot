@@ -6,3 +6,6 @@ export const fetchAppList = () =>
 
 export const addApp = (name) =>
   axios.put("http://localhost:3000/api/add", { name })
+
+export const removeApp = (name) =>
+  axios.post("http://localhost:3000/api/remove", { name })

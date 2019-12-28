@@ -1,5 +1,6 @@
 import ListApps from './apps/features/ListApps'
 import AddApp from './apps/features/AddApp'
+import RemoveApp from './apps/features/RemoveApp'
 import ShowStatus from './apps/features/ShowStatus'
 import TakeApp from './apps/features/TakeApp'
 import ReturnApp from './apps/features/ReturnApp'
@@ -29,10 +30,22 @@ const returnApp = (
          .then(CancelReminder(remindersService))
          .then(NotifyTeam(notifier, messages.userHasReturnedApp))
 
+const removeApp = (
+  appsRepo,
+  remindersService,
+  notifier,
+  messages
+) => ({app}) =>
+  Promise.resolve({app})
+         .then(RemoveApp(appsRepo))
+         .then(CancelReminder(remindersService))
+         .then(NotifyTeam(notifier, messages.appHasBeenRemoved))
+
 export default {
   ListApps,
   AddApp,
   ShowStatus,
+  RemoveApp: removeApp,
   TakeApp: takeApp,
   ReturnApp: returnApp
 }

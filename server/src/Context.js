@@ -5,16 +5,15 @@ import RemindersRepo from './redis/reminders/RemindersRepo'
 import RemindersService from '#/src/core/reminders/RemindersService'
 import Messages from './messages'
 import SlackbotNotifier from './slackbot/SlackbotNotifier'
-// import TakeNotifier from './memory/TakeNotifier'
+import TakeNotifier from './memory/TakeNotifier'
 
 import Features from './core/features'
 
 const locator = Locator()
 locator.singleton(PromiseRedis.createClient({url: process.env['REDIS_URL']}), {name: 'redisClient'})
        .singleton(Messages, {name: 'messages'})
-      //  TODO: Reinstate the Slackbot Notifier
-       .singleton(new SlackbotNotifier(), { name: 'notifier' })
-      //  .singleton(new TakeNotifier(), { name: 'notifier' })
+       // .singleton(new SlackbotNotifier(), { name: 'notifier' })
+       .singleton(new TakeNotifier(), { name: 'notifier' })
        .singleton(new AppsRepo(locator.redisClient, process.env['ROOT_KEY']))
        .singleton(new RemindersRepo(locator.redisClient, process.env['ROOT_KEY']))
        .singleton(new RemindersService(locator.remindersRepo, locator.notifier, 4000))
@@ -23,6 +22,7 @@ locator.singleton(PromiseRedis.createClient({url: process.env['REDIS_URL']}), {n
        .fnFactory(Features.ShowStatus)
        .fnFactory(Features.ListApps)
        .fnFactory(Features.AddApp)
+       .fnFactory(Features.RemoveApp)
        .onExit(() => {
          locator.redisClient.quit()
        })

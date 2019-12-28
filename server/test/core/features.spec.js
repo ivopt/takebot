@@ -70,6 +70,44 @@ describe('features', () => {
     })
   })
 
+  describe('RemoveApp', () => {
+    let removeApp = null
+
+    beforeEach(async () => {
+      await Context.reset()
+
+      removeApp = Context.buildFn(features.RemoveApp)
+    })
+
+    it('removes an app', async () => {
+      await Context.appsRepo.add({name: 'appA'}, {name: 'appB'})
+
+      await removeApp({app: 'appA'})
+      const apps = await Context.appsRepo.list()
+
+      expect(apps).toEqual([{id: 'appB', name: 'appB'}])
+    })
+
+    it('removes any existing reminders for the app being removed', async () => {
+      await Context.appsRepo.add({name: 'appA'}, {name: 'appB'})
+      await Context.remindersService.add({app: 'appA', user: 'somedude', message: 'random'})
+
+      await removeApp({app: 'appA'})
+      const reminder = await Context.remindersService.find('appA')
+
+      expect(reminder).toBeUndefined()
+    })
+
+    it('notifies that app has been removed', async () => {
+      await Context.appsRepo.add({name: 'appA'}, {name: 'appB'})
+      await removeApp({app: 'appA'})
+
+      const notifications = Context.notifier.teamNotifications
+      expect(notifications.length).toEqual(1)
+      expect(notifications[0].message).toMatch('`appA` has been removed')
+    })
+  })
+
   describe('ShowStatus', () => {
     let showStatus
 
