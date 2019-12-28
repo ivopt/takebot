@@ -1,0 +1,71 @@
+#!/bin/bash
+
+function start-sync {
+  DOCKER_SYNC_SKIP_UPGRADE=true DOCKER_SYNC_SKIP_UPDATE=true DOCKER_SYNC_SKIP_DEPENDENCIES_CHECK=true\
+  docker-sync start
+}
+
+function stop-sync {
+  DOCKER_SYNC_SKIP_UPGRADE=true DOCKER_SYNC_SKIP_UPDATE=true DOCKER_SYNC_SKIP_DEPENDENCIES_CHECK=true\
+  docker-sync stop
+}
+
+function start-all-shell {
+  docker-compose run -p 3000:3000 -p 1234:1234 -p 2345:2345 takebot bash
+}
+
+function start-fe-shell {
+  docker-compose run -p 1234:1234 -p 2345:2345 takebot bash
+}
+
+function start-be-shell {
+  docker-compose run -p 3000:3000 -p 9229:9229 takebot bash
+}
+
+function stop-containers {
+  docker-compose down
+}
+
+function redis {
+  redis-cli -u redis://127.0.0.1:16379
+}
+
+function start-shell {
+  start-sync 
+  start-all-shell
+}
+
+function stop-shell {
+  stop-sync
+  stop-containers
+}
+
+function fe-start {
+  start-sync
+  start-fe-shell
+} 
+
+function be-start {
+  start-sync 
+  start-be-shell
+} 
+
+function help {
+  echo "usage: x [command]"
+  echo
+  echo "commands:"
+  echo "  * shell - starts sync and a container with FE and BE ports open"
+  echo "  * fe - starts sync and container with FE shell"
+  echo "  * be - starts sync and container with BE shell"
+  echo "  * stop - stops everything"
+  echo "  * redis - runs redis-cli against dev host"
+}
+
+case $1 in
+  shell) start-shell ;;
+  stop) stop-shell ;;
+  fe) fe-start ;;
+  be) be-start ;;
+  redis) redis ;;
+  *) help ;;
+esac
