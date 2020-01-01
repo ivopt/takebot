@@ -13,13 +13,13 @@ describe('Command', () => {
   it('runs the "take" command', () => {
     const command = new Command('ivo', 'take appA')
     command.run(Context)
-    expect(Context.takeApp).toBeCalledWith('appA', 'ivo')
+    expect(Context.takeApp).toBeCalledWith({ app: 'appA', user: 'ivo' })
   })
 
   it('runs the "return" command', () => {
     const command = new Command('ivo', 'return appA')
     command.run(Context)
-    expect(Context.returnApp).toBeCalledWith('appA', 'ivo')
+    expect(Context.returnApp).toBeCalledWith({ app: 'appA', user: 'ivo' })
   })
 
   it('fails with "Invalid command" when issued an invalid command', async () => {

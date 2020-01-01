@@ -4,7 +4,6 @@ import { Form, Button } from 'react-bootstrap'
 import { addApp } from './Service'
 
 const extractAndCall = (callback) => (event) => {
-  console.log("setting state")
   callback(event.target.value)
 }
 

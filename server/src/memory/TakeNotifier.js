@@ -1,4 +1,4 @@
-import ITakeNotifier from '../core/ITakeNotifier'
+import ITakeNotifier from "../core/notifications/ITakeNotifier"
 
 export default class TakeNotifier extends ITakeNotifier {
   notifyUser = (user, message) => console.log(`to '${user}': ${message}`)

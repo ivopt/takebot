@@ -1,13 +1,9 @@
+import { effect } from '../../../util/Railway'
+
 export default (
-  remindIn,
-  remindersRepo,
-  notifier,
-) => async (ctx) => {
-  const sendNotification = () =>
-    notifier.notifyUser(ctx.user, `Are you done with \`${ctx.app}\` ?`)
-
-  const reminderId = setTimeout(sendNotification, remindIn)
-  await remindersRepo.add(ctx.app, reminderId)
-
-  return { ...ctx, reminderId }
-}
+  remindersService,
+  messages
+) => effect(async ({app, user}) => {
+  const message = messages.areYouDoneWith(app)
+  await remindersService.add({app, user, message})
+})

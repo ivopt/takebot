@@ -1,13 +1,18 @@
 import React, { useState, useEffect } from 'react'
 import { Table, Button } from 'react-bootstrap'
 
-import { fetchAppList } from './Service'
+import { fetchAppList, removeApp } from './Service'
 import { BSLinkButton } from '../util/BootstrapRouterBridge'
 
 const AppsTable = ({match}) => {
   const [apps, setApps] = useState([])
 
   useEffect(() => { fetchAppList().then(setApps) }, [])
+
+  const deleteApp = (id) => (event) => {
+    event.preventDefault()
+    removeApp(id).then(() => fetchAppList().then(setApps))
+  }
 
   return (
     <React.Fragment>
@@ -23,7 +28,7 @@ const AppsTable = ({match}) => {
           {apps.map(({id}) => (
             <tr key={id}>
               <td>{id}</td>
-              <td><Button className="float-right" variant="danger">Delete</Button></td>
+              <td><Button className="float-right" variant="danger" onClick={deleteApp(id)}>Delete</Button></td>
             </tr>
           ))}
         </tbody>

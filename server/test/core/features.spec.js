@@ -16,6 +16,11 @@ describe('features', () => {
     Context.exit()
   })
 
+  beforeEach(() => {
+    jest.useFakeTimers()
+    jest.clearAllTimers()
+  })
+
   describe('ListApps', () => {
     let listApps = null
 
@@ -65,6 +70,44 @@ describe('features', () => {
     })
   })
 
+  describe('RemoveApp', () => {
+    let removeApp = null
+
+    beforeEach(async () => {
+      await Context.reset()
+
+      removeApp = Context.buildFn(features.RemoveApp)
+    })
+
+    it('removes an app', async () => {
+      await Context.appsRepo.add({name: 'appA'}, {name: 'appB'})
+
+      await removeApp({app: 'appA'})
+      const apps = await Context.appsRepo.list()
+
+      expect(apps).toEqual([{id: 'appB', name: 'appB'}])
+    })
+
+    it('removes any existing reminders for the app being removed', async () => {
+      await Context.appsRepo.add({name: 'appA'}, {name: 'appB'})
+      await Context.remindersService.add({app: 'appA', user: 'somedude', message: 'random'})
+
+      await removeApp({app: 'appA'})
+      const reminder = await Context.remindersService.find('appA')
+
+      expect(reminder).toBeUndefined()
+    })
+
+    it('notifies that app has been removed', async () => {
+      await Context.appsRepo.add({name: 'appA'}, {name: 'appB'})
+      await removeApp({app: 'appA'})
+
+      const notifications = Context.notifier.teamNotifications
+      expect(notifications.length).toEqual(1)
+      expect(notifications[0].message).toMatch('`appA` has been removed')
+    })
+  })
+
   describe('ShowStatus', () => {
     let showStatus
 
@@ -111,8 +154,13 @@ describe('features', () => {
 
     it('sets up a reminder', async () => {
       await takeApp({app: 'appA', user: 'ivo' })
-      const reminderId = await Context.remindersRepo.find('appA')
-      expect(reminderId).toBeDefined()
+      const expectedMessage = Context.messages.areYouDoneWith('appA')
+      const reminder = await Context.remindersRepo.find('appA')
+
+      jest.runOnlyPendingTimers()
+
+      expect(reminder).toMatchObject({app: 'appA', user: 'ivo', message: Context.messages.areYouDoneWith('appA')})
+      expect(Context.notifier.userNotifications).toContainEqual({user: 'ivo', message: expectedMessage})
     })
 
     it('notifies about the app being taken', async () => {
@@ -146,7 +194,6 @@ describe('features', () => {
     let returnApp = null
     const takenApp = 'appA'
     const expectedUser = 'ivo'
-    const expectedReminderId = 1234
 
     beforeEach(async () => {
       await Context.reset()
@@ -155,7 +202,11 @@ describe('features', () => {
       returnApp = Context.buildFn(features.ReturnApp)
 
       await Context.appsRepo.take(takenApp, expectedUser)
-      await Context.remindersRepo.add(takenApp, expectedReminderId)
+      await Context.remindersService.add({
+        app: takenApp,
+        user: expectedUser,
+        message: 'some random message'
+      })
     })
 
     it('allows a user to return a taken app', async () => {
@@ -168,13 +219,9 @@ describe('features', () => {
     })
 
     it('removes existing reminders for the taken app', async () => {
-      const existingReminderId = await Context.remindersRepo.find(takenApp)
-      expect(existingReminderId).toEqual(expectedReminderId)
-
       await returnApp({app: takenApp, user: expectedUser})
 
-      const noReminderId = await Context.remindersRepo.find(takenApp)
-      expect(noReminderId).toBeUndefined()
+      expect(await Context.remindersRepo.find(takenApp)).toBeUndefined()
     })
 
     it('notifies the team about app being returned', async () => {
