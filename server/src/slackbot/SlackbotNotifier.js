@@ -10,6 +10,6 @@ export default class SlackBotNotifier extends ITakeNotifier {
     })
   }
 
-  notifyTeam = (message) => this.bot.postMessageToChannel("general", message)
+  notifyTeam = (message) => this.bot.postMessageToChannel(process.env["SLACK_CHANNEL"], message)
   notifyUser = (user, message) => this.bot.postMessageToUser(user, message)
 }
