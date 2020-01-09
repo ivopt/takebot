@@ -4,8 +4,8 @@ import { pick } from 'lodash/object'
 import basicAuth from 'express-basic-auth'
 
 export default (Context, config = {}, router = new Router()) => {
-  const username = config.env.HTTP_AUTH_USERNAME
-  const password = config.env.HTTP_AUTH_PASSWORD
+  const username = config.env && config.env.HTTP_AUTH_USERNAME
+  const password = config.env && config.env.HTTP_AUTH_PASSWORD
 
   router.use(cors())
 
