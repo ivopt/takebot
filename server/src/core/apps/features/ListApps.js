@@ -1,9 +1,8 @@
 import ListAllApps from '../UseCases/ListAllApps'
+import { Railway } from '../../../util/Railway'
 
-const ListApps = (
-  appsRepo,
-) => () =>
-  Promise.resolve({})
-         .then(ListAllApps(appsRepo))
+const ListApps = (appsRepo) => Railway([
+  ListAllApps(appsRepo)
+])
 
 export default ListApps

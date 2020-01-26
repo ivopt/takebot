@@ -2,7 +2,7 @@ import { Locator } from './util/Locator'
 import PromiseRedis from './redis/PromiseRedis'
 import AppsRepo from './redis/apps/AppsRepo'
 import RemindersRepo from './redis/reminders/RemindersRepo'
-import RemindersService from '#/src/core/reminders/RemindersService'
+import RemindersService from './core/reminders/RemindersService'
 import Messages from './messages'
 import SlackbotNotifier from './slackbot/SlackbotNotifier'
 // Offline DEV harness

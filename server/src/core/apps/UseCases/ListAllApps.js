@@ -1,9 +1,6 @@
-const ListAllApps = (
-  appsRepo
-) => async (ctx) => {
-  const appList = await appsRepo.list()
+import { chain } from "../../../util/Railway"
 
-  return { ...ctx, apps: appList }
-}
+const ListAllApps = (appsRepo) => 
+  chain(async () => ({ apps: await appsRepo.list() }))
 
 export default ListAllApps
