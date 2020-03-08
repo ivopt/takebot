@@ -1,9 +1,9 @@
 import ListAllApps from '../UseCases/ListAllApps'
 
 const ListApps = (
-  appsRepo,
+  appsService,
 ) => () =>
   Promise.resolve({})
-         .then(ListAllApps(appsRepo))
+         .then(ListAllApps(appsService))
 
 export default ListApps

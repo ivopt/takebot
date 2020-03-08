@@ -8,7 +8,7 @@ describe('ListApps', () => {
 
   beforeEach(async () => {
     await Context.reset()
-    await Context.appsRepo.add({name: "appA"}, {name: "appB"})
+    await Context.appsService.add({name: "appA"}, {name: "appB"})
 
     listApps = Context.buildFn(ListApps)
   })

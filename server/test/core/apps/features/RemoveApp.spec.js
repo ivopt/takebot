@@ -16,10 +16,10 @@ describe('RemoveApp', () => {
   })
 
   it('removes an app to the app list', async () => {
-    await Context.appsRepo.add({name: 'appA'}, {name: 'appB'})
+    await Context.appsService.add({name: 'appA'}, {name: 'appB'})
 
     await removeApp({app: 'appA'})
-    const apps = await Context.appsRepo.list()
+    const apps = await Context.appsService.list()
 
     expect(apps).toEqual([
       { id: 'appB', name: 'appB' }
@@ -27,7 +27,7 @@ describe('RemoveApp', () => {
   })
 
   it('does not remove a non-existing app', async () => {
-    await Context.appsRepo.add({ name: 'appB' })
+    await Context.appsService.add({ name: 'appB' })
 
     try {
       await removeApp({app: 'appA'})

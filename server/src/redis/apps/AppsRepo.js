@@ -1,5 +1,6 @@
 import IAppsRepo from "../../core/apps/IAppsRepo"
 import { coalesce } from "../helpers"
+import { AppAlreadyExists } from "../../core/apps/Errors"
 
 export default class AppsRepo extends IAppsRepo {
   constructor(redisClient, rootKey) {
@@ -13,14 +14,8 @@ export default class AppsRepo extends IAppsRepo {
   remove = (...appIds) => Promise.all(appIds.map(this._removeApp))
   list = () => this.redisClient.hvals(this.appsKey)
                                .then((d) => d.map(JSON.parse))
-  exist = (appId) => this.list()
-                         .then(findById(appId))
-
-  take = (app, user) => this.redisClient.hset(this.takenAppsKey, app, user)
-  release = (app) => this.redisClient.hdel(this.takenAppsKey, app)
-  holder = (app) => this.redisClient.hget(this.takenAppsKey, app)
-  takenApps = () => this.redisClient.hgetall(this.takenAppsKey)
-                                    .then(coalesce({}))
+  exist = (appName) => this.list()
+                           .then(findByName(appName))
 
   // Private
   _addApp = (app) =>
@@ -29,4 +24,4 @@ export default class AppsRepo extends IAppsRepo {
   _removeApp = (appId) => this.redisClient.hdel(this.appsKey, appId)
 }
 
-const findById = (id) => (list) => list.find(it => id == it.id)
+const findByName = (name) => (list) => list.find(it => name == it.name)

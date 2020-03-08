@@ -7,7 +7,7 @@ describe('TakeApp', () => {
 
   beforeEach(async () => {
     await Context.reset()
-    await Context.appsRepo.add({name: "appA"}, {name: "appB"})
+    await Context.appsService.add({name: "appA"}, {name: "appB"})
 
     takeApp = Context.buildFn(TakeApp, {remindIn: 1})
   })
@@ -28,7 +28,7 @@ describe('TakeApp', () => {
 
   it('allows a user to take an app', async () => {
     await takeApp({app: "appA", user: "ivo"})
-    const holder = await Context.appsRepo.holder("appA")
+    const holder = await Context.appsService.holder("appA")
     expect(holder).toEqual("ivo")
   })
 

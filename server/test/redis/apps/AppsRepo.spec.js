@@ -5,7 +5,6 @@ const arrayContaining = expect.arrayContaining
 
 describe('AppsRepo', () => {
   const AppsRepoKey = "TakeBot:apps"
-  const TakenAppsKey = `${AppsRepoKey}:taken`
   let redisClient
   let subject
 
@@ -87,69 +86,6 @@ describe('AppsRepo', () => {
 
     it('returns false if a given app does not exist', async () => {
       expect(await subject.exist('appA')).toBeFalsy()
-    })
-  })
-
-  describe('#take', () => {
-    const app = "appA"
-    const expectedUser = "TheUserThatTookIt"
-
-    it('sets an app as taken by the given user', async () => {
-      await subject.take(app, expectedUser)
-      const user = await redisClient.hget(TakenAppsKey, app)
-      expect(user).toEqual(expectedUser)
-    })
-  })
-
-  describe('#release', () => {
-    const app = "appA"
-    const expectedUser = "TheUserThatTookIt"
-
-    beforeEach(async () => await redisClient.hset(TakenAppsKey, app, expectedUser))
-
-    it('releases the app', async () => {
-      await subject.release(app)
-      const user = await redisClient.hget(TakenAppsKey, app)
-      expect(user).toBeNull()
-    })
-  })
-
-  describe('#holder', () => {
-    const app = "appA"
-    const user = "TheUserThatIsHoldingTheApp"
-    beforeEach(async () => await redisClient.hset(TakenAppsKey, app, user))
-    afterEach(async () => await redisClient.hdel(TakenAppsKey, app, user))
-
-    it('returns the holder of an app', async () => {
-      expect(await subject.holder("appA")).toEqual(user)
-    })
-
-    describe('when app is not taken', () => {
-      beforeEach(async () => await redisClient.hdel(TakenAppsKey, app, user))
-
-      it('returns null', async () => {
-        expect(await subject.holder("appA")).toBeNull()
-      })
-    })
-  })
-
-  describe('#takenApps', () => {
-    it('reports all taken apps', async () => {
-      await redisClient.hset(TakenAppsKey, "app1", "user1")
-      await redisClient.hset(TakenAppsKey, "app2", "user3")
-      await redisClient.hset(TakenAppsKey, "app3", "user3")
-      await redisClient.hset(TakenAppsKey, "app4", "user2")
-
-      expect(await subject.takenApps()).toMatchObject({
-        "app1": "user1",
-        "app2": "user3",
-        "app3": "user3",
-        "app4": "user2",
-      })
-    })
-
-    it('when there are no taken apps, coalesces to an empty map', async () => {
-      expect(await subject.takenApps()).toMatchObject({})
     })
   })
 })

@@ -20,7 +20,7 @@ describe('AddApp', () => {
 
   it('adds an app to the app list', async () => {
     await addApp({app: {name: 'appA'}})
-    const apps = await Context.appsRepo.list()
+    const apps = await Context.appsService.list()
 
     expect(apps).toEqual(arrayContaining([
       { id: 'appA', name: 'appA' }
@@ -28,7 +28,7 @@ describe('AddApp', () => {
   })
 
   it('does not add an existing app', async () => {
-    await Context.appsRepo.add({ name: 'appA' })
+    await Context.appsService.add({ name: 'appA' })
 
     try {
       await addApp({app: {name: 'appA'}})

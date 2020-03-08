@@ -1,7 +1,7 @@
 const ListAllApps = (
-  appsRepo
+  appsService
 ) => async (ctx) => {
-  const appList = await appsRepo.list()
+  const appList = await appsService.list()
 
   return { ...ctx, apps: appList }
 }

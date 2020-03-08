@@ -14,11 +14,11 @@ describe('ReturnApp', () => {
 
   beforeEach(async () => {
     await Context.reset()
-    await Context.appsRepo.add({name: 'appA'}, {name: 'appB'})
+    await Context.appsService.add({name: 'appA'}, {name: 'appB'})
 
     returnApp = Context.buildFn(ReturnApp)
 
-    await Context.appsRepo.take(takenApp, expectedUser)
+    await Context.appsService.take(takenApp, expectedUser)
     await Context.remindersRepo.add(takenApp, expectedReminderId)
   })
 
@@ -28,11 +28,11 @@ describe('ReturnApp', () => {
   })
 
   it('allows a user to return a taken app', async () => {
-    const holder = await Context.appsRepo.holder(takenApp)
+    const holder = await Context.appsService.holder(takenApp)
     expect(holder).toEqual(expectedUser)
 
     await returnApp({app: takenApp, user: expectedUser})
-    const noholder = await Context.appsRepo.holder(takenApp)
+    const noholder = await Context.appsService.holder(takenApp)
     expect(noholder).toBeNull()
   })
 

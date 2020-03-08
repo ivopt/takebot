@@ -1,23 +1,13 @@
+const message = (messages, user) =>
+  user ? messages.appTakenBy(user) : messages.appIsFree()
+
 export default (
-  appsRepo,
+  appsService,
   messages
 ) => async (ctx = {}) => {
-  const appList = await appsRepo.list()
-  const takenApps = await appsRepo.takenApps()
-  const message = (st) =>
-    st ? messages.appTakenBy(st) : messages.appIsFree()
-  const appStatus = (st) => st ? 'taken' : 'free'
-
   const status =
-    appList.map(a => a.id)
-           .reduce((acc, app) =>
-             acc.concat({
-               id: app,
-               status: appStatus(takenApps[app]),
-               user: takenApps[app],
-               message: message(takenApps[app])
-             }), []
-           )
+    (await appsService.status())
+      .map((appStatus) => Object.assign({message: message(messages, appStatus.user)}, appStatus))
 
   return { status, ...ctx }
 }

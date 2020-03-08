@@ -5,9 +5,19 @@ const arrayContaining = expect.arrayContaining
 describe('AllAppsStatus', () => {
   const existingApps = [{ id: 'appA' }, { id: 'appB'}]
 
-  const mockedAppRepo = {
-    list: () => Promise.resolve(existingApps),
-    takenApps: () => Promise.resolve({'appA': 'jack'})
+  const mockedAppsService = {
+    status: () => Promise.resolve([
+      {
+        id: 'appA',
+        message: "taken by jack",
+        status: "taken",
+        user: "jack",
+      },{
+        id: 'appB',
+        message: "is free",
+        status: "free",
+      }
+    ])
   }
 
   const messages = {
@@ -15,7 +25,7 @@ describe('AllAppsStatus', () => {
     appIsFree: () => 'is free'
   }
 
-  const allAppsStatus = AllAppsStatus(mockedAppRepo, messages)
+  const allAppsStatus = AllAppsStatus(mockedAppsService, messages)
 
   it('includes the status of all known apps', async () => {
     const { status } = await allAppsStatus()

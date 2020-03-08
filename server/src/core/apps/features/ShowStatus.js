@@ -1,10 +1,10 @@
 import AllAppsStatus from '../UseCases/AllAppsStatus'
 
 const ShowStatus = (
-  appsRepo,
+  appsService,
   messages,
 ) => () =>
   Promise.resolve({})
-         .then(AllAppsStatus(appsRepo, messages))
+         .then(AllAppsStatus(appsService, messages))
 
 export default ShowStatus

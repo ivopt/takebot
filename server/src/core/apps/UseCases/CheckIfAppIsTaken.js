@@ -1,9 +1,9 @@
 import { AppIsNotTaken, AppIsTakenByOtherUser } from '../Errors'
 
 export default (
-  appsRepo
+  appsService
 ) => async (ctx) => {
-  const holder = await appsRepo.holder(ctx.app)
+  const holder = await appsService.holder(ctx.app)
 
   if (!holder)
     throw new AppIsNotTaken('App is not taken')
