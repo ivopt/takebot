@@ -88,6 +88,17 @@ describe('features', () => {
       expect(apps).toEqual([{id: 'appB', name: 'appB'}])
     })
 
+    it('does not remove a non-existing app', async () => {
+      await Context.appsService.add({ name: 'appB' })
+
+      try {
+        await removeApp({app: 'appA'})
+        fail('Expected to fail')
+      } catch(error) {
+        expect(error).toBeInstanceOf(AppDoesNotExist)
+      }
+    })
+
     it('removes any existing reminders for the app being removed', async () => {
       await Context.appsService.add({name: 'appA'}, {name: 'appB'})
       await Context.remindersService.add({app: 'appA', user: 'somedude', message: 'random'})
