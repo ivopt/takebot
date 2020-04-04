@@ -1,6 +1,5 @@
-import SetReminder from './reminders/features/SetReminder'
-import CancelReminder from './reminders/features/CancelReminder'
-import NotifyTeam from './notifications/features/NotifyTeam'
+import { SetReminder, CancelReminder } from './reminders/UseCases'
+import { NotifyTeam } from './notifications/UseCases'
 
 import {
   ListApps,
