@@ -22,13 +22,7 @@ export default class AppsService {
   }
 
   // ---------------------------------------------------------------------------
-  release = async (app, user) => {
-    if (!await this.exist(app)){
-      throw new AppDoesNotExist(`${app} does not exist`)
-    }
-
-    return this.takenAppsRepo.release(app, user)
-  }
+  release = async (app) => this.takenAppsRepo.release(app)
 
   // ---------------------------------------------------------------------------
   holder = (app) => this.takenAppsRepo.holder(app)

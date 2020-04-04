@@ -11,11 +11,9 @@ export default class ITakenAppsRepo {
   /** Releases an app taken by a user
    *
    * @param app String - name of the application to release
-   * @param user String - name of user who took the app
    * @return Promise(true)
-   * @raise AppIsNotTakenByUser - if app is taken by a different user or not at all
    * **/
-  release = (app, user) => Promise.reject('Not Implemented!')
+  release = (app) => Promise.reject('Not Implemented!')
 
   /** Returns the name of the user holding the app
    *

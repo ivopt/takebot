@@ -1,5 +1,5 @@
 import ITakenAppsRepo from "../../core/apps/ITakenAppsRepo"
-import { AppIsTaken, AppIsNotTakenByUser } from "../../core/apps/Errors"
+import { AppIsTaken } from "../../core/apps/Errors"
 import { coalesce } from "../helpers"
 
 export default class TakenAppsRepo extends ITakenAppsRepo {
@@ -17,14 +17,7 @@ export default class TakenAppsRepo extends ITakenAppsRepo {
       throw new AppIsTaken('App is already taken')
   }
 
-  release = async (app, user) => {
-    const holder = await this.holder(app)
-
-    if (holder !== user)
-      throw new AppIsNotTakenByUser(`App is not taken by ${user}`)
-    else
-      return this.redis.hdel(this.key, app)
-  }
+  release = async (app) => this.redis.hdel(this.key, app)
 
   holder = (app) => this.redis.hget(this.key, app)
 

@@ -56,22 +56,9 @@ describe('AppsService', () => {
     })
   })
 
-  describe('#release', () => {
-    it('given an existing app, releases it', async () => {
-      const appsService = Subject({exist: (_app) => Promise.resolve(true)})
-      await appsService.release('appA', 'jack')
-      expect(TakenAppsRepo().release).toBeCalledWith('appA', 'jack')
-    })
-
-    it('if app does not exist, raises AppDoesNotExist', async () => {
-      const appsService = Subject({exist: (_app) => Promise.resolve(false)})
-      try {
-        await appsService.release('appA', 'jack')
-        fail('Should have failed!')
-      } catch(error) {
-        expect(error).toBeInstanceOf(AppDoesNotExist)
-      }
-    })
+  it('delegates release to TakenAppsRepo', async () => {
+    await Subject().release('appA')
+    expect(TakenAppsRepo().release).toBeCalledWith('appA')
   })
 
   it('delegates holder to TakenAppsRepo', async () => {

@@ -61,24 +61,6 @@ describe('TakenAppsRepo', () => {
       await subject.release(app, expectedUser)
       expect(await subject.holder(app)).toBeNull()
     })
-
-    it('raises a AppIsNotTakenByUser error if the app is not taken by the user', async () => {
-      try {
-        await subject.release(app, 'anotherUser')
-        fail('Should have failed!')
-      } catch (error) {
-        expect(error).toBeInstanceOf(AppIsNotTakenByUser)
-      }
-    })
-
-    it('raises a AppIsNotTakenByUser error if the app is not even taken at all', async () => {
-      try {
-        await subject.release('appZZZ', 'anotherUser')
-        fail('Should have failed!')
-      } catch (error) {
-        expect(error).toBeInstanceOf(AppIsNotTakenByUser)
-      }
-    })
   })
 
   describe('#list', () => {
