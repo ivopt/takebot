@@ -3,6 +3,6 @@ export default {
   userHasReturnedApp: ({user, app}) => `✅ ${user} has returned \`${app}\` ✅`,
   appIsFree: () => `✅ is free`,
   appTakenBy: (user) => `⛔ taken by ${user}`,
-  areYouDoneWith: (app) => `Are you done with \`${app}?\``,
+  areYouDoneWith: (app) => `Are you done with \`${app}\`?`,
   appHasBeenRemoved: ({app}) => `\`${app}\` has been removed`
 }
