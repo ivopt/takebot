@@ -1,4 +1,4 @@
-import NotifyTeam from '#/src/core/notifications/features/NotifyTeam'
+import { NotifyTeam } from '#/src/core/notifications/UseCases'
 
 class MockedNotifier {
   constructor(notifyTeamMock) {
