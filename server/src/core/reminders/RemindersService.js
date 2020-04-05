@@ -24,7 +24,7 @@ export default class RemindersService {
   reinstateStoredReminders = async () => {
     const list = await this.remindersRepo.all()
 
-    list.forEach(({app, user, message}) => {
+    Object.values(list).forEach(({app, user, message}) => {
       this.intervals[app] =
         setInterval(() => this.notifier.notifyUser(user, message), this.remindIn)
     })
