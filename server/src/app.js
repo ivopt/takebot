@@ -6,6 +6,9 @@ const config = {
   env: process.env
 }
 
-const run = () => server(Context, config).run()
+const run = () => {
+  Context.remindersService.reinstateStoredReminders()
+  server(Context, config).run()
+}
 
 module.exports = { run }
