@@ -1,12 +1,29 @@
 export default class IAppsRepo {
-  add    = (...apps) => Promise.reject('Not Implemented!')
-  remove = (...apps) => Promise.reject('Not Implemented!')
-  list   = ()        => Promise.reject('Not Implemented!')
-  exist  = (app)     => Promise.reject('Not Implemented!')
+  /** Adds new apps to the system
+   * Either adds all or none
+   *
+   * @param apps Array<App> - list of apps to be added
+   * @return Promise(true)
+   * @raise AppAlreadyExists if any of the app already exists
+   * **/
+  add = (...apps) => Promise.reject('Not Implemented!')
 
-  take      = (app, user) => Promise.reject('Not Implemented!')
-  release   = (app)       => Promise.reject('Not Implemented!')
-  holder    = (app)       => Promise.reject('Not Implemented!')
-  takenApps = ()          => Promise.reject('Not Implemented!')
-  appStatus = (app)       => Promise.reject('Not Implemented!')
+  /** Removes apps from the system
+   *
+   * @param apps Array<App> - list of apps to be removed
+   * @return Promise(true)
+   * **/
+  remove = (...apps) => Promise.reject('Not Implemented!')
+
+  /** Lists apps on the system
+   *
+   * @return Promise(Array<App> || [])
+   * **/
+  list = () => Promise.reject('Not Implemented!')
+
+  /** Checks if an app exists
+   *
+   * @return Promise(true || false)
+   * **/
+  exist = (app) => Promise.reject('Not Implemented!')
 }

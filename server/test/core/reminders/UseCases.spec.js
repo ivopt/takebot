@@ -1,4 +1,4 @@
-import SetReminder from '#/src/core/reminders/features/SetReminder'
+import { SetReminder} from '#/src/core/reminders/UseCases'
 import Context from '#/test/support/TestContext'
 
 describe('SetReminder', () => {

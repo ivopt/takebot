@@ -1,6 +1,8 @@
 import { Locator } from '#/src/util/Locator'
 import PromiseRedis from '#/src/redis/PromiseRedis'
 import AppsRepo from '#/src/redis/apps/AppsRepo'
+import TakenAppsRepo from '#/src/redis/apps/TakenAppsRepo'
+import AppsService from '#/src/core/apps/AppsService'
 import RemindersRepo from '#/src/redis/reminders/RemindersRepo'
 import RemindersService from '#/src/core/reminders/RemindersService'
 import ITakeNotifier from '#/src/core/notifications/ITakeNotifier'
@@ -30,9 +32,11 @@ const locator = Locator()
 locator.singleton(PromiseRedis.createClient({url: process.env['REDIS_URL']}), {name: 'redisClient'})
        .singleton(Messages, {name: 'messages'})
        .singleton(new AppsRepo(locator.redisClient, process.env['ROOT_KEY']))
+       .singleton(new TakenAppsRepo(locator.redisClient, process.env['ROOT_KEY']))
        .singleton(new RemindersRepo(locator.redisClient, process.env['ROOT_KEY']))
        .singleton(new MockedNotifier(), {name: 'notifier'})
        .singleton(new RemindersService(locator.remindersRepo, locator.notifier, 1000))
+       .singleton(new AppsService(locator.appsRepo, locator.takenAppsRepo))
        .fnFactory(Features.TakeApp)
        .fnFactory(Features.ReturnApp)
        .fnFactory(Features.ShowStatus)

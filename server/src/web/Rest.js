@@ -1,16 +1,12 @@
 import { Router } from 'express'
 import cors from 'cors'
 import { pick } from 'lodash/object'
-import basicAuth from 'express-basic-auth'
+import setupBasicAuth from './HttpBasicAuthHelper'
 
 export default (Context, config = {}, router = new Router()) => {
-  const username = config.env.HTTP_AUTH_USERNAME
-  const password = config.env.HTTP_AUTH_PASSWORD
+  setupBasicAuth(config, router)
 
   router.use(cors())
-
-  if (username && password)
-    router.use(basicAuth({ users: { [username]: password }, challenge: true }))
 
   router.post('/take', (req, res) => {
     const context = pick(req.body, ['app', 'user'])

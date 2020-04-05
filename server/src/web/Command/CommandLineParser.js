@@ -7,7 +7,9 @@ const parseOptions = (optionPairs) => {
 
 export default {
   parse: (commandLine) => {
-    const [name, app, ...options] = commandLine.split(" ")
+    const [name, app, ...options] = commandLine.replace(/\s+/g, " ") // remove multiple whitespaces
+                                               .replace(/(^ *| *$)/g, "") // remove wh padding on the start/end
+                                               .split(" ")
     return { name, app, options: parseOptions(options) }
   }
 }
