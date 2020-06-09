@@ -1,6 +1,7 @@
 import { Router } from 'express'
 import cors from 'cors'
 import { pick } from 'lodash/object'
+import parse from 'parse-duration'
 import setupBasicAuth from './HttpBasicAuthHelper'
 
 export default (Context, config = {}, router = new Router()) => {
@@ -9,7 +10,8 @@ export default (Context, config = {}, router = new Router()) => {
   router.use(cors())
 
   router.post('/take', (req, res) => {
-    const context = pick(req.body, ['app', 'user'])
+    const context = pick(req.body, ['app', 'user', 'lease'])
+    context['lease'] = parse(String(context['lease']))
 
     Context.takeApp(context)
            .then(() => res.json(userResponse(`You have taken ${context.app}`)))

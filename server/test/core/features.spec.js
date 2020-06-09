@@ -154,17 +154,17 @@ describe('features', () => {
       await Context.reset()
       await Context.appsService.add({name: 'appA'}, {name: 'appB'})
 
-      takeApp = Context.buildFn(features.TakeApp, {remindIn: 1})
+      takeApp = Context.buildFn(features.TakeApp)
     })
 
     it('allows a user to take an app', async () => {
-      await takeApp({app: 'appA', user: 'ivo' })
+      await takeApp({app: 'appA', user: 'ivo'})
       const holder = await Context.appsService.holder('appA')
       expect(holder).toEqual('ivo')
     })
 
     it('sets up a reminder', async () => {
-      await takeApp({app: 'appA', user: 'ivo' })
+      await takeApp({app: 'appA', user: 'ivo'})
       const expectedMessage = Context.messages.areYouDoneWith('appA')
       const reminder = await Context.remindersRepo.find('appA')
 
@@ -175,7 +175,7 @@ describe('features', () => {
     })
 
     it('notifies about the app being taken', async () => {
-      await takeApp({app: 'appA', user: 'ivo' })
+      await takeApp({app: 'appA', user: 'ivo'})
       const notifications = Context.notifier.teamNotifications
       expect(notifications.length).toEqual(1)
       expect(notifications[0].message).toMatch('ivo has taken `appA`')
@@ -183,7 +183,7 @@ describe('features', () => {
 
     it('when an app does not exist, fails and warns the app does not exist', async () => {
       try {
-        await takeApp({app: 'appZ', user: 'ivo' })
+        await takeApp({app: 'appZ', user: 'ivo'})
         fail('Expected to fail')
       } catch(error) {
         expect(error).toBeInstanceOf(AppDoesNotExist)
@@ -192,12 +192,25 @@ describe('features', () => {
 
     it('when an app is already taken, fails and warns the app is taken', async () => {
       try {
-        await takeApp({app: 'appA', user: 'jack' })
-        await takeApp({app: 'appA', user: 'ivo' })
+        await takeApp({app: 'appA', user: 'jack'})
+        await takeApp({app: 'appA', user: 'ivo'})
         fail('Expected to fail')
       } catch(error) {
         expect(error).toBeInstanceOf(AppIsTaken)
       }
+    })
+
+    describe('when supplying a custom time lease', () => {
+      it('only triggers notifications after the time lease expires', async () => {
+        await takeApp({app: 'appA', user: 'ivo', lease: 600000})
+        const expectedMessage = Context.messages.areYouDoneWith('appA')
+
+        jest.advanceTimersByTime(600000 - 20);
+        expect(Context.notifier.userNotifications).toBeEmpty()
+
+        jest.advanceTimersByTime(20);
+        expect(Context.notifier.userNotifications).toContainEqual({user: 'ivo', message: expectedMessage})
+      })
     })
   })
 

@@ -27,6 +27,24 @@ describe('Rest', () => {
               .expect(200, { text: 'You have taken appA' })
     })
 
+    it('allows a user to specify a lease time when taking an available app', async () => {
+      jest.useFakeTimers()
+
+      await request(server())
+              .post('/take')
+              .send({user: 'john', app: 'appA', lease: '10m'})
+              .set('Content-Type', 'application/json')
+              .expect(200, { text: 'You have taken appA' })
+
+      jest.advanceTimersByTime(600000 - 20);
+      expect(Context.notifier.userNotifications).toBeEmpty()
+
+      jest.advanceTimersByTime(20);
+      expect(Context.notifier.userNotifications).toContainEqual(
+        expect.objectContaining({ user: 'john' })
+      )
+    })
+
     it('allows a user to return an app he has taken', async () => {
       await Context.takeApp({app: 'appA', user: 'john'})
 

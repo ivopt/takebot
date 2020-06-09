@@ -6,11 +6,12 @@ export default class RemindersService {
     this.intervals = {}
   }
 
-  add = async ({app, user, message}) => {
-    await this.remindersRepo.add(app, {app, user, message})
+  add = async ({app, user, message, lease}) => {
+    lease = lease || this.remindIn
+    await this.remindersRepo.add(app, {app, user, message, lease})
 
     this.intervals[app] =
-      setInterval(() => this.notifier.notifyUser(user, message), this.remindIn)
+      setInterval(() => this.notifier.notifyUser(user, message), lease)
   }
 
   remove = async ({app}) => {
@@ -24,9 +25,9 @@ export default class RemindersService {
   reinstateStoredReminders = async () => {
     const list = await this.remindersRepo.all()
 
-    Object.values(list).forEach(({app, user, message}) => {
+    Object.values(list).forEach(({app, user, message, lease}) => {
       this.intervals[app] =
-        setInterval(() => this.notifier.notifyUser(user, message), this.remindIn)
+        setInterval(() => this.notifier.notifyUser(user, message), lease)
     })
   }
 }
