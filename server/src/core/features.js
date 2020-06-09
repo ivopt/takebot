@@ -15,8 +15,8 @@ const takeApp = (
   remindersService,
   notifier,
   messages
-) => ({app, user}) =>
-  Promise.resolve({app, user})
+) => ({app, user, lease}) =>
+  Promise.resolve({app, user, lease})
          .then(TakeApp(appsService))
          .then(SetReminder(remindersService, messages))
          .then(NotifyTeam(notifier, messages.userHasTakenApp))

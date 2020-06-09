@@ -2,10 +2,10 @@ import CommandLineParser from './CommandLineParser'
 
 export default class Command {
   constructor(user, commandLine) {
-    const {name, app, options} = CommandLineParser.parse(commandLine)
+    const {name, app, lease} = CommandLineParser.parse(commandLine)
     this.name = name
     this.app = app
-    this.options = options
+    this.lease = lease
     this.user = user
   }
 
@@ -14,7 +14,7 @@ export default class Command {
 
   invalidCommand = (_) => Promise.reject({message: "Invalid command"})
 
-  run_take   = (Context) => Context.takeApp({app: this.app, user: this.user})
+  run_take   = (Context) => Context.takeApp({app: this.app, user: this.user, lease: this.lease})
   run_return = (Context) => Context.returnApp({app: this.app, user: this.user})
   run_status = (Context) => Context.showStatus()
 

@@ -1,23 +1,29 @@
 import CommandLineParser from '#/src/web/Command/CommandLineParser'
 
 describe('CommandLineParser', () => {
-  it('given a command line, returns an object with name, app and options', () => {
-    const commandLine = 'return AppA --opt1 valopt1 --opt2 valopt2'
-
+  it('return an object with all known components of the command', () => {
+    const commandLine = 'take appA 45m'
     const parsedCommand = CommandLineParser.parse(commandLine)
 
-    expect(parsedCommand.name).toEqual('return')
-    expect(parsedCommand.app).toEqual('AppA')
-    expect(parsedCommand.options).toEqual({opt1: 'valopt1', opt2: 'valopt2'})
+    expect(parsedCommand.name).toEqual('take')
+    expect(parsedCommand.app).toEqual('appA')
+    expect(parsedCommand.lease).toEqual(2700000)
   })
 
-  it('given a command line with too many extra white spaces, returns an object with name, app and options', () => {
-    const commandLine = '    return     AppA   --opt1  valopt1 --opt2 valopt2    '
-
+  it('lease is optional', () => {
+    const commandLine = 'return AppA'
     const parsedCommand = CommandLineParser.parse(commandLine)
 
     expect(parsedCommand.name).toEqual('return')
     expect(parsedCommand.app).toEqual('AppA')
-    expect(parsedCommand.options).toEqual({opt1: 'valopt1', opt2: 'valopt2'})
+    expect(parsedCommand.lease).toBeNull()
+  })
+
+  it('handles too many whitespaces properly', () => {
+    const commandLine = '    return     AppA   '
+    const parsedCommand = CommandLineParser.parse(commandLine)
+
+    expect(parsedCommand.name).toEqual('return')
+    expect(parsedCommand.app).toEqual('AppA')
   })
 })

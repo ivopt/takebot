@@ -26,10 +26,27 @@ describe('RemindersService', () => {
         message: 'a message'
       })
 
-      expect(RemindersRepo().add).toBeCalledWith('appA', { app: 'appA', user: 'userName', message: 'a message' })
-      expect(setInterval).toHaveBeenLastCalledWith(expect.any(Function), 10)
+      expect(RemindersRepo().add).toBeCalledWith('appA', { app: 'appA', user: 'userName', message: 'a message', lease: remindIn })
+      expect(setInterval).toHaveBeenLastCalledWith(expect.any(Function), remindIn)
 
       jest.runOnlyPendingTimers()
+
+      expect(Notifier().notifyUser).toBeCalledWith('userName', 'a message')
+    })
+
+    it('allows reminder interval to be specified', async () => {
+      const remindersService = Subject()
+      await remindersService.add({
+        app: 'appA',
+        user: 'userName',
+        message: 'a message',
+        lease: 600000
+      })
+
+      expect(RemindersRepo().add).toBeCalledWith('appA', { app: 'appA', user: 'userName', message: 'a message', lease: 600000 })
+      expect(setInterval).toHaveBeenLastCalledWith(expect.any(Function), 600000)
+
+      jest.advanceTimersByTime(600000);
 
       expect(Notifier().notifyUser).toBeCalledWith('userName', 'a message')
     })
@@ -62,7 +79,7 @@ describe('RemindersService', () => {
 
   describe('#find', () => {
     const reminder = { app: 'appB', user: 'user 2', message: 'message 2' }
-    
+
     const RemindersRepo = memoizeFn(() => ({
       find: (name) =>
         name === 'appB' ? Promise.resolve(reminder) : Promise.reject()
