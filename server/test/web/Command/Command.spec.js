@@ -13,8 +13,15 @@ describe('Command', () => {
   it('runs the "take" command', () => {
     const command = new Command('ivo', 'take appA')
     command.run(Context)
-    expect(Context.takeApp).toBeCalledWith({ app: 'appA', user: 'ivo' })
+    expect(Context.takeApp).toBeCalledWith({ app: 'appA', user: 'ivo', lease: null })
   })
+
+  it('runs the "take" command 2', () => {
+    const command = new Command('ivo', 'take appA 45m')
+    command.run(Context)
+    expect(Context.takeApp).toBeCalledWith({ app: 'appA', user: 'ivo', lease: 2700000 })
+  })
+
 
   it('runs the "return" command', () => {
     const command = new Command('ivo', 'return appA')
